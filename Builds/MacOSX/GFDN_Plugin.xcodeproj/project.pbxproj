@@ -77,6 +77,10 @@
 			isa = PBXBuildFile;
 			fileRef = A4898C548ACDDCF56E07DE49;
 		};
+		63A8C8BDB0793078D30519AC = {
+			isa = PBXBuildFile;
+			fileRef = 20B35365D16F37F057D13A41;
+		};
 		AE7D2BF20D9375F4FED81557 = {
 			isa = PBXBuildFile;
 			fileRef = 679F8D37B92AAF256F43373E;
@@ -267,6 +271,13 @@
 			lastKnownFileType = sourcecode.cpp.objcpp;
 			name = "include_juce_data_structures.mm";
 			path = "../../JuceLibraryCode/include_juce_data_structures.mm";
+			sourceTree = "SOURCE_ROOT";
+		};
+		20B35365D16F37F057D13A41 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = GFDN.cpp;
+			path = "../../../GFDN_Standalone/Source/GFDN.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
 		2104A8A2DC651F2A26DC7538 = {
@@ -493,6 +504,13 @@
 			path = System/Library/Frameworks/Accelerate.framework;
 			sourceTree = SDKROOT;
 		};
+		9BC82B6843560E401ADD145A = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = GFDN.h;
+			path = "../../../GFDN_Standalone/Source/GFDN.h";
+			sourceTree = "SOURCE_ROOT";
+		};
 		9FC13F91EAC5BBE7B6506C74 = {
 			isa = PBXFileReference;
 			lastKnownFileType = file;
@@ -692,6 +710,8 @@
 		1EAB340C90D2B0CE5EFD76E0 = {
 			isa = PBXGroup;
 			children = (
+				20B35365D16F37F057D13A41,
+				9BC82B6843560E401ADD145A,
 				679F8D37B92AAF256F43373E,
 				EAAFC966E46FA51A1E6D676B,
 				CB5B9AB29842E049E164C14A,
@@ -1666,6 +1686,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63A8C8BDB0793078D30519AC,
 				AE7D2BF20D9375F4FED81557,
 				BF19C3206E3F8C0844CBC8B1,
 				BB1FC6FB0F0585897D0E968D,

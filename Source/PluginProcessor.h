@@ -11,7 +11,7 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "FDN.h"
+#include "GFDN.h"
 
 //==============================================================================
 /**
@@ -55,20 +55,27 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    enum
+    {
+        nGroups = 2,
+    };
     
     juce::AudioProcessorValueTreeState parameters;
-    FDN fdn;
+    GFDN gfdn;
     
     //Input parameters
     std::atomic<float>* dryMix; // Mix level of original signal;
-    std::atomic<float>* mixingFrac;  // amount of mixing (0-1)
-    std::atomic<float>* t60low;  // T60 of low frequencies
-    std::atomic<float>* t60high;    // T60 of high frequencies
-    std::atomic<float>* transFreq;   //transition frequency of shelf filter
+    std::atomic<float>* couplingCoeff; // Coupling coefficient between rooms;
+    std::atomic<float>* mixingFrac[nGroups];  // amount of mixing (0-1)
+    std::atomic<float>* t60low[nGroups];  // T60 of low frequencies
+    std::atomic<float>* t60high[nGroups];    // T60 of high frequencies
+    std::atomic<float>* transFreq[nGroups];   //transition frequency of shelf filter
 
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Gfdn_pluginAudioProcessor)
     
-    int nDelayLines = 8;
+    int nDelayLines[nGroups] = {8,8};
+    int LR[nGroups] = {50,101};  //range of delay lines in ms (non-overlapping)
+    int UR[nGroups] = {100,150};
 };

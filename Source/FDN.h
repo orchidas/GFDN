@@ -20,7 +20,7 @@ public:
     FDN();                      //constructor
     ~FDN();                     //destructor
     
-    void initialize(float SR, int nDel);  //initialize FDN, setup delayLine buffers
+    void initialize(float SR, int nDel, int LR, int UR);  //initialize FDN, setup delayLine buffers
     
     void updateMixingMatrix(float frac);     //update mixing matrix when user changes parameters
     
@@ -30,23 +30,30 @@ public:
     
     float processSample(const float input);      //spit out one sample of output based on incoming input
     
-    Eigen::MatrixXf kroneckerProduct(Eigen::MatrixXf m1, Eigen::MatrixXf m2);   //compute kronecker product between 2 eigen matrices
+    MixingMatrix getMixingMatrix();
     
-
-private:
-    int nDelayLines;                            //number of delay lines
-    float sampleRate;                           //sample rate in Hz
+    void findNPrime(int LR, int UR, int N);   //find N prime numbers within a range
+    
+    float getMixingAngle();
+    
     DelayLine* buffers;                         //all the delay line buffers
     int* delLen;                                //length of each delay line
     float* b;                                   //driving coefficients
     float* c;                                   //output coefficients
+   
+
+private:
+    int nDelayLines;                            //number of delay lines
+    float sampleRate;                           //sample rate in Hz
     float d;                                    //direct path
    
     
     //matrices and vectors
     MixingMatrix M;
+    Eigen::MatrixXf mixingMatrix;
     Eigen::VectorXf delayLineOutput;
     Eigen::VectorXf delayLineInput;
+   
     
     
 };

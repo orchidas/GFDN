@@ -26,41 +26,75 @@ Gfdn_pluginAudioProcessor::Gfdn_pluginAudioProcessor()
     ("dryMix", // parameterID
      "Dry Mix", // parameter name
      0.0f,   // minimum value
-     1.0f,   // maximum value
-     0.5f), // default value)
+     100.0f,   // maximum value
+     50.0f), // default value)
     std::make_unique<juce::AudioParameterFloat>
-    ("mixingFrac", // parameterID
+    ("couplingCoeff", // parameterID
+     "Coupling Fraction", // parameter name
+     0.0f,   // minimum value
+     100.0f,   // maximum value
+     10.0f), // default value)
+    std::make_unique<juce::AudioParameterFloat>
+    ("mixingFrac0", // parameterID
      "Mixing Fraction", // parameter name
      0.0f,   // minimum value
-     1.0f,   // maximum value
+     100.0f,   // maximum value
      0.0f),  //default value
     std::make_unique<juce::AudioParameterFloat>
-    ("t60low", // parameterID
+    ("t60low0", // parameterID
      "Low T60", // parameter name
      0.05f,   // minimum value
      20.0f,   // maximum value
      1.0f), // default value
     std::make_unique<juce::AudioParameterFloat>
-    ("t60high", // parameterID
+    ("t60high0", // parameterID
      "High T60", // parameter name
      0.05f,   // minimum value
      10.0f,   // maximum value
      0.5f),
     std::make_unique<juce::AudioParameterFloat>
-    ("transFreq", // parameterID
+    ("transFreq0", // parameterID
      "Trans. Frequency", // parameter name
      100.0f,   // minimum value
      10000.0f,   // maximum value
-     200.0f)
+     200.0f),
+    std::make_unique<juce::AudioParameterFloat>
+    ("mixingFrac1", // parameterID
+     "Mixing Fraction", // parameter name
+     0.0f,   // minimum value
+     100.0f,   // maximum value
+     0.0f),  //default value
+    std::make_unique<juce::AudioParameterFloat>
+    ("t60low1", // parameterID
+     "Low T60", // parameter name
+     0.05f,   // minimum value
+     20.0f,   // maximum value
+     3.0f), // default value
+    std::make_unique<juce::AudioParameterFloat>
+    ("t60high1", // parameterID
+     "High T60", // parameter name
+     0.05f,   // minimum value
+     10.0f,   // maximum value
+     1.0f),
+    std::make_unique<juce::AudioParameterFloat>
+    ("transFreq1", // parameterID
+     "Trans. Frequency", // parameter name
+     100.0f,   // minimum value
+     10000.0f,   // maximum value
+     500.0f)
     })
 #endif
 {
     //set user defined parameters
     dryMix = parameters.getRawParameterValue("dryMix");
-    mixingFrac = parameters.getRawParameterValue("mixingFrac");
-    t60low = parameters.getRawParameterValue("t60low");
-    t60high = parameters.getRawParameterValue("t60high");
-    transFreq = parameters.getRawParameterValue("transFreq");
+    couplingCoeff = parameters.getRawParameterValue("couplingCoeff");
+
+    for( int i = 0; i < nGroups; i++){
+        mixingFrac[i] = parameters.getRawParameterValue("mixingFrac" + std::to_string(i));
+        t60low[i] = parameters.getRawParameterValue("t60low" + std::to_string(i));
+        t60high[i] = parameters.getRawParameterValue("t60high" + std::to_string(i));
+        transFreq[i] = parameters.getRawParameterValue("transFreq" + std::to_string(i));
+    }
 }
 
 Gfdn_pluginAudioProcessor::~Gfdn_pluginAudioProcessor()
@@ -134,10 +168,14 @@ void Gfdn_pluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    fdn.initialize((float)sampleRate, nDelayLines);
-    fdn.updateDryMix(*dryMix);
-    fdn.updateMixingMatrix(*mixingFrac);
-    fdn.updateT60Filter(*t60low, *t60high, *transFreq);
+    gfdn.initialize(nGroups, (float)sampleRate, nDelayLines, LR, UR);
+    
+    for(int i = 0; i < nGroups; i++){
+        gfdn.updateMixingMatrix(*mixingFrac[i]/100.0, i);
+        gfdn.updateT60Filter(*t60low[i], *t60high[i], *transFreq[i], i);
+    }
+    gfdn.updateDryMix(*dryMix/100.0);
+    gfdn.updateCouplingCoeff(*couplingCoeff/100.0);
 
 }
 
@@ -210,7 +248,7 @@ void Gfdn_pluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     int channel = 0;
         const float* channelInData = buffer.getReadPointer(channel, 0);
         for (int i = 0; i < numSamples; i++){
-            buffer.setSample(channel, i, fdn.processSample(channelInData[i]));
+            buffer.setSample(channel, i, gfdn.processSample(channelInData[i]));
         }
     //}
 }

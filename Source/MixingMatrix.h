@@ -19,9 +19,9 @@ public:
     ~MixingMatrix();
     
     void initialize(int nDelLines);      //initialize
-    void updateMixingMatrix(float frac);    //update mixing matrix when user changes angle
+    Eigen::MatrixXf updateMixingMatrix(float frac);    //update mixing matrix when user changes angle
     Eigen::MatrixXf kroneckerProduct(Eigen::MatrixXf m1, Eigen::MatrixXf m2);    //kronecker product of two matrices
-    Eigen::MatrixXf getMixingMatrix();     //access mixing matrix from another class
+    float getMixingAngle();
     bool isOrthonormal(Eigen::MatrixXf X);    //check if matrix is orthonormal
     
     

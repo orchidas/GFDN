@@ -18,15 +18,13 @@ void MixingMatrix::initialize(int nDelLines){
     nSize = nDelLines;
     Nkron = (int) log2(nSize);
     mixingAngle = 0.0f;
-    M.resize(nSize, nSize);
-    M.setIdentity();
 }
 
 //update matrix when user changes mixing angle
-void MixingMatrix::updateMixingMatrix(float frac){
+Eigen::MatrixXf MixingMatrix::updateMixingMatrix(float frac){
     
     //create 2D rotation matrix
-    mixingAngle = frac/(PI/4.0f);   //frac is fraction of mixing from 0 to 1
+    mixingAngle = frac * (PI/4.0f);   //frac is fraction of mixing from 0 to 1
     rotation2D << std::cos(mixingAngle), std::sin(mixingAngle),
     -std::sin(mixingAngle), std::cos(mixingAngle);
     
@@ -35,11 +33,10 @@ void MixingMatrix::updateMixingMatrix(float frac){
     Eigen::MatrixXf kronProd;
     for(int i = 0; i < Nkron-1; i++){
         kronProd = kroneckerProduct(rotation2D, temp);
-        //temp.resize(kronProd.rows(), kronProd.cols());    //use if there is an error
         temp = kronProd;
-        //kronProd.resize(kronProd.rows()*2, kronProd.cols()*2);
     }
-    M = temp;
+    //M = temp;
+    return temp;
 }
 
 //kronecker product of two matrices
@@ -55,10 +52,6 @@ Eigen::MatrixXf MixingMatrix::kroneckerProduct(Eigen::MatrixXf m1, Eigen::Matrix
     return m3;
 }
 
-//return mixing matrix
-Eigen::MatrixXf MixingMatrix::getMixingMatrix(){
-    return M;
-}
 
 //helper function to ensure matrix is orthonormal
 bool MixingMatrix::isOrthonormal(Eigen::MatrixXf X){
@@ -68,4 +61,12 @@ bool MixingMatrix::isOrthonormal(Eigen::MatrixXf X){
     else
         return false;
 }
+
+
+float MixingMatrix::getMixingAngle(){
+    return mixingAngle;
+}
+
+
+
 
