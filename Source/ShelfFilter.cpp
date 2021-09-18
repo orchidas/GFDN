@@ -44,8 +44,8 @@ void ShelfFilter::updateCoeff(float g_dc, float g_pi, float fT){
     float beta1 = 0.5 * ((gDC - gPI) + (gDC + gPI) * alpha);
     
     float rho = std::sin(wT/2.0 - PI/4.0) / std::sin(wT/2.0 + PI/4.0);
-    b0 = (beta0 + rho*beta1) / (1+rho*alpha);
-    b1 = (beta1 + rho*beta0);
+    b0 = (beta0 + rho*beta1) / (1 + rho*alpha);
+    b1 = (beta1 + rho*beta0) / (1 + rho*alpha);
     a1 = (rho + alpha)/(1 + rho*alpha);
     
     //std::cout << "b0 :" << b0 << " b1 :" << b1 << " a1 :" << a1 << std::endl;

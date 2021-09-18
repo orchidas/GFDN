@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="Qt6Nr3" name="GFDN_Plugin" projectType="audioplug" displaySplashScreen="1"
-              jucerFormatVersion="1" pluginManufacturer="orchi">
+              jucerFormatVersion="1" pluginManufacturer="orchi" pluginFormats="buildAU"
+              pluginAUMainType="'aufx'" companyName="orchi">
   <MAINGROUP id="MAOkfp" name="GFDN_Plugin">
     <GROUP id="{A9A594F4-8512-783A-F893-D6D4AAA7CD90}" name="Source">
+      <FILE id="Vegw6T" name="GFDN.cpp" compile="1" resource="0" file="../GFDN_Standalone/Source/GFDN.cpp"/>
+      <FILE id="B9DCfO" name="GFDN.h" compile="0" resource="0" file="../GFDN_Standalone/Source/GFDN.h"/>
       <FILE id="ZN11gF" name="DelayLine.cpp" compile="1" resource="0" file="../GFDN_Standalone/Source/DelayLine.cpp"/>
       <FILE id="dJOzFB" name="DelayLine.h" compile="0" resource="0" file="../GFDN_Standalone/Source/DelayLine.h"/>
       <FILE id="BIcc2n" name="FDN.cpp" compile="1" resource="0" file="../GFDN_Standalone/Source/FDN.cpp"/>

@@ -81,7 +81,23 @@ Gfdn_pluginAudioProcessor::Gfdn_pluginAudioProcessor()
      "Trans. Frequency", // parameter name
      100.0f,   // minimum value
      10000.0f,   // maximum value
-     500.0f)
+     500.0f),
+    std::make_unique<juce::AudioParameterFloat>
+    ("sourcePos0",
+     "Source",
+     0.0, 1.0, 0.0),
+    std::make_unique<juce::AudioParameterFloat>
+    ("sourcePos1",
+     "Source",
+     0.0, 1.0, 0.0),
+    std::make_unique<juce::AudioParameterFloat>
+    ("listenerPos0",
+     "Listener",
+     0.0, 1.0, 0.0),
+    std::make_unique<juce::AudioParameterFloat>
+    ("listenerPos1",
+     "Listener",
+     0.0, 1.0, 0.0)
     })
 #endif
 {
@@ -94,6 +110,9 @@ Gfdn_pluginAudioProcessor::Gfdn_pluginAudioProcessor()
         t60low[i] = parameters.getRawParameterValue("t60low" + std::to_string(i));
         t60high[i] = parameters.getRawParameterValue("t60high" + std::to_string(i));
         transFreq[i] = parameters.getRawParameterValue("transFreq" + std::to_string(i));
+        sourcePos[i] = parameters.getRawParameterValue("sourcePos" + std::to_string(i));
+        listenerPos[i] = parameters.getRawParameterValue("listenerPos" + std::to_string(i));
+
     }
 }
 
