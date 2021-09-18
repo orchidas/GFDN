@@ -70,7 +70,7 @@ public:
     std::atomic<float>* t60low[nGroups];  // T60 of low frequencies
     std::atomic<float>* t60high[nGroups];    // T60 of high frequencies
     std::atomic<float>* transFreq[nGroups];   //transition frequency of shelf filter
-    std::atomic<float>* sourcePos[nGroups];     //where is source placed (it's a bit sad that i couldn't figure out how to do this with bool)
+    std::atomic<float>* sourcePos[nGroups];     //where is source placed (I couldn't figure out how to do this with bool)
     std::atomic<float>* listenerPos[nGroups];   //where is listener placed
 
 private:
@@ -78,6 +78,6 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Gfdn_pluginAudioProcessor)
     
     int nDelayLines[nGroups] = {8,8};
-    int LR[nGroups] = {50,101};  //range of delay lines in ms (non-overlapping)
-    int UR[nGroups] = {100,150};
+    int LR[nGroups] = {50,101};  //lower range of delay lines in ms (non-overlapping)
+    int UR[nGroups] = {100,150};  //upper range of delay lines in ms
 };

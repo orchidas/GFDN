@@ -28,19 +28,18 @@ Gfdn_pluginAudioProcessorEditor::Gfdn_pluginAudioProcessorEditor (Gfdn_pluginAud
     dryMixSlider.addListener(this);
     dryMixAttach.reset (new SliderAttachment (valueTreeState, "dryMix", dryMixSlider));
 
-    
     addAndMakeVisible (dryMixLabel);
     dryMixLabel.setText ("Dry/Wet mix", juce::dontSendNotification);
     dryMixLabel.setFont(Font ("Times New Roman", 15.0f, Font::plain));
     dryMixLabel.attachToComponent (&dryMixSlider, true);
-    
+
+    //coupling coefficient
     addAndMakeVisible (&couplingCoeffSlider);
     couplingCoeffSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
     couplingCoeffSlider.setRange (0,100.0);
     couplingCoeffSlider.setValue(10.0);
     couplingCoeffSlider.addListener(this);
     
-    //Dry/Wet mix
     addAndMakeVisible (couplingCoeffLabel);
     couplingCoeffLabel.setText ("Coupling %", juce::dontSendNotification);
     couplingCoeffLabel.setFont(Font ("Times New Roman", 15.0f, Font::plain));
@@ -99,7 +98,6 @@ Gfdn_pluginAudioProcessorEditor::Gfdn_pluginAudioProcessorEditor (Gfdn_pluginAud
         transFreqAttach[i].reset (new SliderAttachment (valueTreeState, "transFreq"+ std::to_string(i), transFreqSlider[i]));
         
         //source and listener positions
-        // configuring on/off button and adding it to the main window
         addAndMakeVisible(sourcePos[i]);
         sourcePos[i].addListener(this);
         sourcePosAttach[i].reset (new ButtonAttachment (valueTreeState, "sourcePos"+ std::to_string(i), sourcePos[i]));
@@ -143,7 +141,6 @@ Gfdn_pluginAudioProcessorEditor::Gfdn_pluginAudioProcessorEditor (Gfdn_pluginAud
     listenerLabel.setFont(Font ("Times New Roman", 15.0f, Font::plain));
     listenerLabel.attachToComponent (&listenerPos[0], true);
     
-    //getLookAndFeel().setColour (Slider::LinearHorizontalSliderFillColourId, Colours::white);
     startTimer(50);
 
 }
