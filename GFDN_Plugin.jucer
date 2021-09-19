@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="Qt6Nr3" name="GFDN_Plugin" projectType="audioplug" displaySplashScreen="1"
-              jucerFormatVersion="1" pluginManufacturer="orchi" pluginFormats="buildAU"
-              pluginAUMainType="'aufx'" companyName="orchi">
+              jucerFormatVersion="1" pluginManufacturer="orchi" pluginFormats="buildAU,buildAUv3,buildVST3"
+              pluginAUMainType="'aufx'" companyName="orchi" pluginAUIsSandboxSafe="1">
   <MAINGROUP id="MAOkfp" name="GFDN_Plugin">
     <GROUP id="{A9A594F4-8512-783A-F893-D6D4AAA7CD90}" name="Source">
       <FILE id="Vegw6T" name="GFDN.cpp" compile="1" resource="0" file="../GFDN_Standalone/Source/GFDN.cpp"/>
