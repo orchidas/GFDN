@@ -13,6 +13,10 @@
 GFDN::GFDN(){}
 GFDN::~GFDN(){
     delete [] fdns;
+    delete [] nDelayLines;
+    delete [] mixingAngles;
+    delete [] b;
+    delete [] c;
 }
 
 void GFDN::initialize(int nGrp, float sR, int* nDel, int* LR, int* UR){
@@ -39,7 +43,7 @@ void GFDN::initialize(int nGrp, float sR, int* nDel, int* LR, int* UR){
     delayLineInput.resize(totalDelayLines);
     delayLineInput.setZero();
     
-    //iniialize driver and driving coefficients
+    //initialize driver and receiver coefficients
     b = new float[totalDelayLines];
     c = new float[totalDelayLines];
     int j = 0;
@@ -71,7 +75,7 @@ void GFDN::updateDryMix(float dry){
 void GFDN::updateListenerRoom(int whichRoom){
     //update c coefficients
     
-    //set all driver coefficients to 0
+    //set all receiver coefficients to 0
     int j = 0;
     for(int i = 0; i < nGroups; i++){
         for(int k = 0; k < nDelayLines[i]; k++)
@@ -98,7 +102,7 @@ void GFDN::updateSourceRoom(int whichRoom){
             b[j++] = fdns[i].b[k];
     }
     
-    //update only the coefficiens in the room where listener is
+    //update only the coefficients in the room where source is
     int delayLineStart = 0;
     for(int i = 0; i < whichRoom; i++)
         delayLineStart += nDelayLines[i];
@@ -147,7 +151,6 @@ void GFDN::updateCoupledMixingMatrix(){
         col = 0;
         
     }
-    //std::cout << obj.isOrthonormal(M_coup) << std::endl;
     
 }
 
@@ -170,7 +173,7 @@ float GFDN::processSample(const float input){
     }
     output += dryMix * input;
     delayLineInput = M_coup * delayLineOutput;
-    //std::cout << "Input : " << input << ", Output : " <<  output << std::endl;
+    std::cout << "Input : " << input << ", Output : " <<  output << std::endl;
     return output;
 
 }

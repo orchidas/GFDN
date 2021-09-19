@@ -23,8 +23,8 @@ void FDN::initialize(float SR, int nDel, int LR, int UR){
     
     nDelayLines = nDel;               //number of delay lines
     sampleRate = SR;                  //sampleRate
-    mixingMatrix.resize(nDelayLines,nDelayLines);
-    M.initialize(nDelayLines);        //mixing matrix
+    mixingMatrix.resize(nDelayLines,nDelayLines);   //mixing matrix
+    M.initialize(nDelayLines);        //mixing matrix object
     
     delayLineOutput.resize(nDelayLines);
     delayLineOutput.setZero();
@@ -36,14 +36,16 @@ void FDN::initialize(float SR, int nDel, int LR, int UR){
     b = new float[nDelayLines];
     c = new float[nDelayLines];
     
-    //allocate orime lenghts to delay lines
+    //allocate prime lengths to delay lines
     findNPrime((int)(LR * sampleRate/1000.0),(int)(UR * sampleRate/1000.0),nDelayLines);
+    
     
     for(int i = 0; i < nDelayLines; ++i){
         
+        std::cout << delLen[i] << std::endl;
         buffers[i].prepare(delLen[i], sampleRate);        //prepare the delay lines
         b[i] = -1 + 2 * ((float)std::rand())/RAND_MAX;    //random numbers between -1 and 1
-        c[i] = 1.0f;                                      //output coefficients = 1
+        c[i] = -1 + 2 * ((float)std::rand())/RAND_MAX;    //output coefficients
     }
     
 }

@@ -41,15 +41,12 @@ private:
     float dryMix;
     float* b;                                   //driving coefficients
     float* c;                                   //output coefficients
-    int driverRoom;
-    int sourceRoom;
     
     Eigen::Matrix2f couplingMatrix;
     Eigen::MatrixXf M_coup;
     Eigen::VectorXf delayLineOutput;
     Eigen::VectorXf delayLineInput;
     
-    //MixingMatrix obj;
     
 
     
