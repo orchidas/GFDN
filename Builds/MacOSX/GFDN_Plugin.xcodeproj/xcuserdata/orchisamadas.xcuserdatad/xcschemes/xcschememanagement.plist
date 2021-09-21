@@ -7,7 +7,7 @@
 		<key>GFDN_Plugin - AU.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>GFDN_Plugin - AUv3 AppExtension.xcscheme_^#shared#^_</key>
 		<dict>
@@ -17,7 +17,7 @@
 		<key>GFDN_Plugin - All.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<key>GFDN_Plugin - Shared Code.xcscheme_^#shared#^_</key>
 		<dict>
