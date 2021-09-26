@@ -195,13 +195,14 @@ void Gfdn_pluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     }
     gfdn.updateDryMix(*dryMix/100.0);
     gfdn.updateCouplingCoeff(*couplingCoeff/100.0);
-
+    
 }
 
 void Gfdn_pluginAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -256,20 +257,31 @@ void Gfdn_pluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
         // ..do something to the data...
     }*/
     
-    //How many input channels?
-    const int numInputChannels = buffer.getNumChannels();
+    //How many channels?
+    const int numChannels = buffer.getNumChannels();
     // How many samples in the buffer for this block?
     const int numSamples = buffer.getNumSamples();
     
+    float input[numSamples][numChannels];
+    float *output;
     
-    //for (int channel = 0; channel < numInputChannels; ++channel)
-    //{
-    int channel = 0;
-        const float* channelInData = buffer.getReadPointer(channel, 0);
+    // read input data into multidimensional array
+    for(int chan = 0; chan < numChannels; chan++){
+        const float* channelInData = buffer.getReadPointer(chan, 0);
+
         for (int i = 0; i < numSamples; i++){
-            buffer.setSample(channel, i, gfdn.processSample(channelInData[i]));
+            input[i][chan] = channelInData[i];
         }
-    //}
+    }
+        
+    for (int i = 0; i < numSamples; i++){
+        output = gfdn.processSample(input[i], numChannels);
+        
+        for(int chan = 0; chan < numChannels; chan++){
+            buffer.setSample(chan, i, output[chan]);
+        }
+    }
+    
 }
 
 //==============================================================================

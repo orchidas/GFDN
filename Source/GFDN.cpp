@@ -26,7 +26,7 @@ void GFDN::initialize(int nGrp, float sR, int* nDel, int* LR, int* UR){
     nDelayLines = new int[nGroups];
     mixingAngles = new float[nGroups];
   
-    int totalDelayLines = 0;
+    totalDelayLines = 0;
     for(int i = 0; i < nGroups; i++){
         
         nDelayLines[i] = nDel[i];
@@ -154,26 +154,45 @@ void GFDN::updateCoupledMixingMatrix(){
     
 }
 
-float GFDN::processSample(const float input){
-    float output = 0.0;
+float* GFDN::processSample(float input[], int numChannels){
+    
+    // output should be stereo
+    float output[numChannels];
+    for (int chan = 0; chan < numChannels; chan++){
+        output[chan] = 0.0;
+    }
+    
     //variable to keep track of delay line number
     int j = 0;
+    int chan = 0;
     
     //loop through groups
     for(int i = 0; i < nGroups; i++){
+        
+        if(j < totalDelayLines/numChannels)
+            chan = 0;
+        else
+            chan = 1;
+        
         //loop through all delay lines in groups
          for(int k = 0; k < nDelayLines[i]; k++){
              fdns[i].buffers[k].update();
-             fdns[i].buffers[k].write(b[j]*input + delayLineInput(j));
+             fdns[i].buffers[k].write(b[j]*input[chan] + delayLineInput(j));
              delayLineOutput(j) = fdns[i].buffers[k].read();
-             output += c[j] * delayLineOutput(j);
+             output[chan] += c[j] * delayLineOutput(j);
              j++;
          }
         
     }
-    output += dryMix * input;
+    
+    for (int chan = 0; chan < numChannels; chan++){
+        output[chan] += dryMix * input[chan];
+        //std::cout << "Input: " << input[chan] << " Output: " << output[chan] << std::endl;
+    }
+
+    
     delayLineInput = M_coup * delayLineOutput;
-    std::cout << "Input : " << input << ", Output : " <<  output << std::endl;
+    //std::cout << "Input : " << input << ", Output : " <<  output << std::endl;
     return output;
 
 }

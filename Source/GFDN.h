@@ -28,12 +28,13 @@ public:
     void updateCouplingCoeff(float alpha);          //construct block mixing matrix
     void updateListenerRoom(int whichRoom);
     void updateSourceRoom(int whichRoom);
-    float processSample(const float input);
+    float* processSample(float input[], int numChannels);   //takes in left and right channel data as input and returns stereo output
     
 private:
     
     const float PI = std::acos(-1);
     int nGroups;
+    int totalDelayLines;
     FDN* fdns;
     int* nDelayLines;
     float* mixingAngles;
