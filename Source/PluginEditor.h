@@ -12,14 +12,12 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "RoomEditor.h"
 
 //==============================================================================
 /**
 */
-class Gfdn_pluginAudioProcessorEditor  : public AudioProcessorEditor,
-                                         public Slider::Listener,
-                                         public Button::Listener,
-                                         private Timer
+class Gfdn_pluginAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
     Gfdn_pluginAudioProcessorEditor (Gfdn_pluginAudioProcessor&, AudioProcessorValueTreeState&);
@@ -32,9 +30,6 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
-    void timerCallback() override;
-    void sliderValueChanged (Slider*) override;
-    void buttonClicked (juce::Button* button) override;
 
     
     enum
@@ -48,12 +43,11 @@ private:
     Gfdn_pluginAudioProcessor& processor;
     juce::AudioProcessorValueTreeState& valueTreeState;
     
+    OwnedArray<RoomEditor> roomEditors;
     
     juce::Label dryMixLabel, couplingCoeffLabel, mixingFracLabel, t60lowLabel, t60highLabel, transFreqLabel, sourceLabel, listenerLabel;
-    juce::Slider dryMixSlider, couplingCoeffSlider, mixingFracSlider[nGroups], t60lowSlider[nGroups], t60highSlider[nGroups], transFreqSlider[nGroups];
-    juce::ToggleButton sourcePos[nGroups],listenerPos[nGroups];
-    std::unique_ptr <SliderAttachment> dryMixAttach, couplingCoeffAttach, mixingFracAttach[nGroups], t60lowAttach[nGroups], t60highAttach[nGroups], transFreqAttach[nGroups];
-    std::unique_ptr <ButtonAttachment> sourcePosAttach[nGroups], listenerPosAttach[nGroups];
+    juce::Slider dryMixSlider, couplingCoeffSlider;
+    std::unique_ptr <SliderAttachment> dryMixAttach, couplingCoeffAttach;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Gfdn_pluginAudioProcessorEditor)
 };

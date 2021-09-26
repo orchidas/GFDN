@@ -82,22 +82,14 @@ Gfdn_pluginAudioProcessor::Gfdn_pluginAudioProcessor()
      100.0f,   // minimum value
      10000.0f,   // maximum value
      500.0f),
-    std::make_unique<juce::AudioParameterFloat>
-    ("sourcePos0",
+    std::make_unique<juce::AudioParameterInt>
+    ("sourcePos",
      "Source",
-     0.0, 1.0, 0.0),
-    std::make_unique<juce::AudioParameterFloat>
-    ("sourcePos1",
-     "Source",
-     0.0, 1.0, 0.0),
-    std::make_unique<juce::AudioParameterFloat>
-    ("listenerPos0",
+     0, nGroups - 1, 0),
+    std::make_unique<juce::AudioParameterInt>
+    ("listenerPos",
      "Listener",
-     0.0, 1.0, 0.0),
-    std::make_unique<juce::AudioParameterFloat>
-    ("listenerPos1",
-     "Listener",
-     0.0, 1.0, 0.0)
+     0, nGroups - 1, 0),
     })
 #endif
 {
@@ -110,10 +102,10 @@ Gfdn_pluginAudioProcessor::Gfdn_pluginAudioProcessor()
         t60low[i] = parameters.getRawParameterValue("t60low" + std::to_string(i));
         t60high[i] = parameters.getRawParameterValue("t60high" + std::to_string(i));
         transFreq[i] = parameters.getRawParameterValue("transFreq" + std::to_string(i));
-        sourcePos[i] = parameters.getRawParameterValue("sourcePos" + std::to_string(i));
-        listenerPos[i] = parameters.getRawParameterValue("listenerPos" + std::to_string(i));
-
     }
+
+    sourcePos = parameters.getRawParameterValue("sourcePos");
+    listenerPos = parameters.getRawParameterValue("listenerPos");
 }
 
 Gfdn_pluginAudioProcessor::~Gfdn_pluginAudioProcessor()
@@ -187,15 +179,21 @@ void Gfdn_pluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    gfdn.initialize(nGroups, (float)sampleRate, nDelayLines, LR, UR);
+    const int numChannels = getMainBusNumInputChannels();
+    gfdn.initialize(nGroups, (float)sampleRate, nDelayLines, LR, UR, numChannels);
     
     for(int i = 0; i < nGroups; i++){
         gfdn.updateMixingMatrix(*mixingFrac[i]/100.0, i);
+        prevMixingFrac[i] = *mixingFrac[i];
+
         gfdn.updateT60Filter(*t60low[i], *t60high[i], *transFreq[i], i);
     }
     gfdn.updateDryMix(*dryMix/100.0);
+
     gfdn.updateCouplingCoeff(*couplingCoeff/100.0);
-    
+    prevCouplingCoeff = *couplingCoeff;
+
+    inputData = std::vector<std::vector<float>>(samplesPerBlock, std::vector<float>(numChannels, 0.0f));
 }
 
 void Gfdn_pluginAudioProcessor::releaseResources()
@@ -231,38 +229,33 @@ bool Gfdn_pluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& layou
 
 void Gfdn_pluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
-    /*ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = buffer->getTotalNumInputChannels();
-    auto totalNumOutputChannels = buffer->getTotalNumOutputChannels();
-
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
-
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-    }*/
+    ScopedNoDenormals noDenormals;
     
+    // update parameters
+    for (int i = 0; i < nGroups; i++) {
+        if (prevMixingFrac[i] != *mixingFrac[i]) {
+            gfdn.updateMixingMatrix(*mixingFrac[i], i);
+            prevMixingFrac[i] = *mixingFrac[i];
+        }
+
+        gfdn.updateT60Filter (*t60low[i], *t60high[i], *transFreq[i], i);
+    }
+
+    gfdn.updateSourceRoom ((int) *sourcePos);
+    gfdn.updateListenerRoom ((int) *listenerPos);
+
+    gfdn.updateDryMix (*dryMix);
+
+    if (prevCouplingCoeff != *couplingCoeff) {
+        gfdn.updateCouplingCoeff(*couplingCoeff);
+        prevCouplingCoeff = *couplingCoeff;
+    }
+
     //How many channels?
     const int numChannels = buffer.getNumChannels();
     // How many samples in the buffer for this block?
     const int numSamples = buffer.getNumSamples();
     
-    float input[numSamples][numChannels];
     float *output;
     
     // read input data into multidimensional array
@@ -270,12 +263,12 @@ void Gfdn_pluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
         const float* channelInData = buffer.getReadPointer(chan, 0);
 
         for (int i = 0; i < numSamples; i++){
-            input[i][chan] = channelInData[i];
+            inputData[i][chan] = channelInData[i];
         }
     }
         
     for (int i = 0; i < numSamples; i++){
-        output = gfdn.processSample(input[i], numChannels);
+        output = gfdn.processSample(inputData[i].data(), numChannels);
         
         for(int chan = 0; chan < numChannels; chan++){
             buffer.setSample(chan, i, output[chan]);

@@ -20,7 +20,7 @@ public:
     GFDN();
     ~GFDN();
     
-    void initialize(int nGrp, float SR, int* nDel, int *LR, int* UR);
+    void initialize(int nGrp, float SR, int* nDel, int *LR, int* UR, int numChannels);
     void updateMixingMatrix(float mixingFrac, int whichRoom);
     void updateCoupledMixingMatrix();
     void updateT60Filter(float t60low, float t60high, float fT, int whichRoom);
@@ -42,6 +42,8 @@ private:
     float dryMix;
     float* b;                                   //driving coefficients
     float* c;                                   //output coefficients
+
+    std::vector<float> output;
     
     Eigen::Matrix2f couplingMatrix;
     Eigen::MatrixXf M_coup;

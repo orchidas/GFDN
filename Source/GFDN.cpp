@@ -19,7 +19,7 @@ GFDN::~GFDN(){
     delete [] c;
 }
 
-void GFDN::initialize(int nGrp, float sR, int* nDel, int* LR, int* UR){
+void GFDN::initialize(int nGrp, float sR, int* nDel, int* LR, int* UR, int numChannels){
     
     nGroups = nGrp;
     fdns = new FDN[nGroups];
@@ -54,6 +54,8 @@ void GFDN::initialize(int nGrp, float sR, int* nDel, int* LR, int* UR){
             j++;
         }
     }
+
+    output.resize (numChannels, 0.0f);
 }
 
 
@@ -69,7 +71,6 @@ void GFDN::updateT60Filter(float t60low, float t60high, float fT, int whichRoom)
 
 void GFDN::updateDryMix(float dry){
     dryMix = dry;
-    
 }
 
 void GFDN::updateListenerRoom(int whichRoom){
@@ -157,7 +158,6 @@ void GFDN::updateCoupledMixingMatrix(){
 float* GFDN::processSample(float input[], int numChannels){
     
     // output should be stereo
-    float output[numChannels];
     for (int chan = 0; chan < numChannels; chan++){
         output[chan] = 0.0;
     }
@@ -193,6 +193,6 @@ float* GFDN::processSample(float input[], int numChannels){
     
     delayLineInput = M_coup * delayLineOutput;
     //std::cout << "Input : " << input << ", Output : " <<  output << std::endl;
-    return output;
+    return output.data();
 
 }
