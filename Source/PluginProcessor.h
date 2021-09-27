@@ -70,10 +70,15 @@ public:
     std::atomic<float>* t60low[nGroups];  // T60 of low frequencies
     std::atomic<float>* t60high[nGroups];    // T60 of high frequencies
     std::atomic<float>* transFreq[nGroups];   //transition frequency of shelf filter
-    std::atomic<float>* sourcePos[nGroups];     //where is source placed (I couldn't figure out how to do this with bool)
-    std::atomic<float>* listenerPos[nGroups];   //where is listener placed
+    std::atomic<float>* sourcePos;     //where is source placed (I couldn't figure out how to do this with bool)
+    std::atomic<float>* listenerPos;   //where is listener placed
 
 private:
+    float prevCouplingCoeff = 0.0f;
+    float prevMixingFrac[nGroups];
+
+    std::vector<std::vector<float>> inputData;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Gfdn_pluginAudioProcessor)
     
