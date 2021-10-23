@@ -5,6 +5,10 @@
               pluginAUMainType="'aufx'" companyName="orchi" pluginAUIsSandboxSafe="1">
   <MAINGROUP id="MAOkfp" name="GFDN_Plugin">
     <GROUP id="{A9A594F4-8512-783A-F893-D6D4AAA7CD90}" name="Source">
+      <FILE id="lE28QI" name="CoupledMixingMatrix.cpp" compile="1" resource="0"
+            file="Source/CoupledMixingMatrix.cpp"/>
+      <FILE id="N3fz2O" name="CoupledMixingMatrix.h" compile="0" resource="0"
+            file="Source/CoupledMixingMatrix.h"/>
       <FILE id="Vj9Lee" name="RoomEditor.cpp" compile="1" resource="0" file="Source/RoomEditor.cpp"/>
       <FILE id="OhsQ6c" name="RoomEditor.h" compile="0" resource="0" file="Source/RoomEditor.h"/>
       <FILE id="LpUGcw" name="DelayLine.cpp" compile="1" resource="0" file="Source/DelayLine.cpp"/>
