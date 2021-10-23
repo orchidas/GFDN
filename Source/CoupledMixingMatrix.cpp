@@ -64,15 +64,17 @@ void CoupledMixingMatrix::updateCouplingFilters(){
 Eigen::VectorXf CoupledMixingMatrix::process(Eigen::VectorXf delayLineOutput){
     
     Eigen::VectorXf delayLineInput(delayLineOutput.size());
-    delayLineInput.setZero();
+    //delayLineInput.setZero();
+    delayLineInput = (M_block.cwiseProduct(couplingScalars)) * delayLineOutput;
     
-    for(int i = 0; i < nDelayLines; i++){
+    //doing this in a loop is too slow and breaks things
+    /*for(int i = 0; i < nDelayLines; i++){
         for(int j = 0; j < nDelayLines; j++){
             if (!isFilter)
-                delayLineInput(i) += M_block(i,j)*couplingScalars(i,j)*delayLineOutput(i);
+                delayLineInput(i) += M_block(i,j)*couplingScalars(i,j)*delayLineOutput(j);
             
         }
-    }
+    }*/
     
     return delayLineInput;
 }
