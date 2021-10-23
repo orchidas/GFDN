@@ -234,7 +234,7 @@ void Gfdn_pluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     // update parameters
     for (int i = 0; i < nGroups; i++) {
         if (prevMixingFrac[i] != *mixingFrac[i]) {
-            gfdn.updateMixingMatrix(*mixingFrac[i], i);
+            gfdn.updateMixingMatrix(*mixingFrac[i]/100.0, i);
             prevMixingFrac[i] = *mixingFrac[i];
         }
 
@@ -244,10 +244,10 @@ void Gfdn_pluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     gfdn.updateSourceRoom ((int) *sourcePos);
     gfdn.updateListenerRoom ((int) *listenerPos);
 
-    gfdn.updateDryMix (*dryMix);
+    gfdn.updateDryMix (*dryMix/100.0);
 
     if (prevCouplingCoeff != *couplingCoeff) {
-        gfdn.updateCouplingCoeff(*couplingCoeff);
+        gfdn.updateCouplingCoeff(*couplingCoeff/100.0);
         prevCouplingCoeff = *couplingCoeff;
     }
 
