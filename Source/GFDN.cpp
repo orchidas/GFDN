@@ -35,8 +35,8 @@ void GFDN::initialize(int nGrp, float sR, int* nDel, int* LR, int* UR, int numCh
         mixingAngles[i] = 0.0f;
     }
     
-    couplingCoeff = 0.0f;
-    M_coup.resize(totalDelayLines, totalDelayLines);
+    M_block.resize(totalDelayLines, totalDelayLines);
+    couplingMatrix.initialize(nGroups, totalDelayLines);
     
     delayLineOutput.resize(totalDelayLines);
     delayLineOutput.setZero();
@@ -62,7 +62,9 @@ void GFDN::initialize(int nGrp, float sR, int* nDel, int* LR, int* UR, int numCh
 void GFDN::updateMixingMatrix(float mixingFrac, int whichRoom){
     fdns[whichRoom].updateMixingMatrix(mixingFrac);
     mixingAngles[whichRoom] = mixingFrac;
+    updateBlockMixingMatrix();
 }
+
 
 void GFDN::updateT60Filter(float t60low, float t60high, float fT, int whichRoom){
     fdns[whichRoom].updateT60Filter(t60low, t60high, fT);
@@ -115,17 +117,13 @@ void GFDN::updateSourceRoom(int whichRoom){
 
 
 void GFDN::updateCouplingCoeff(float alpha){
-    couplingCoeff = alpha * (PI/4.0f);
     
-    // for 2 coupled rooms only
-    couplingMatrix << std::cos(couplingCoeff), std::sin(couplingCoeff),
-    -std::sin(couplingCoeff), std::cos(couplingCoeff);
+    couplingMatrix.updateCouplingCoeff(alpha);
     
-    updateCoupledMixingMatrix();
 }
 
 
-void GFDN::updateCoupledMixingMatrix(){
+void GFDN::updateBlockMixingMatrix(){
     
     int row = 0, col = 0;
 
@@ -139,10 +137,10 @@ void GFDN::updateCoupledMixingMatrix(){
             
             //diagonal block elements
             if (i == j){
-                M_coup.block(row, col, nDelayLines[i], nDelayLines[j])  = couplingMatrix(i,j)*M.updateMixingMatrix(mixingAngles[i]);
+                M_block.block(row, col, nDelayLines[i], nDelayLines[j])  = M.updateMixingMatrix(mixingAngles[i]);
             }
             else{
-                M_coup.block(row, col, nDelayLines[i], nDelayLines[j]) = couplingMatrix(i,j) *
+                M_block.block(row, col, nDelayLines[i], nDelayLines[j]) =
                                                         (N.updateMixingMatrix(mixingAngles[j]/2.0) * M.updateMixingMatrix(mixingAngles[i]/2.0));
             }
             col += nDelayLines[j];
@@ -152,8 +150,11 @@ void GFDN::updateCoupledMixingMatrix(){
         col = 0;
         
     }
+    couplingMatrix.updateBlockMatrix(M_block);
     
 }
+
+
 
 float* GFDN::processSample(float input[], int numChannels){
     
@@ -191,7 +192,7 @@ float* GFDN::processSample(float input[], int numChannels){
     }
 
     
-    delayLineInput = M_coup * delayLineOutput;
+    delayLineInput = couplingMatrix.process(delayLineOutput);
     //std::cout << "Input : " << input << ", Output : " <<  output << std::endl;
     return output.data();
 

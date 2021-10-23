@@ -12,6 +12,7 @@
 #include "JuceHeader.h"
 #include "FDN.h"
 #include "MixingMatrix.h"
+#include "CoupledMixingMatrix.h"
 #include <Eigen/Dense>
 
 
@@ -22,7 +23,7 @@ public:
     
     void initialize(int nGrp, float SR, int* nDel, int *LR, int* UR, int numChannels);
     void updateMixingMatrix(float mixingFrac, int whichRoom);
-    void updateCoupledMixingMatrix();
+    void updateBlockMixingMatrix();
     void updateT60Filter(float t60low, float t60high, float fT, int whichRoom);
     void updateDryMix(float dry);
     void updateCouplingCoeff(float alpha);          //construct block mixing matrix
@@ -36,17 +37,15 @@ private:
     int nGroups;
     int totalDelayLines;
     FDN* fdns;
+    CoupledMixingMatrix couplingMatrix;
     int* nDelayLines;
     float* mixingAngles;
-    float couplingCoeff;
     float dryMix;
     float* b;                                   //driving coefficients
     float* c;                                   //output coefficients
 
     std::vector<float> output;
-    
-    Eigen::Matrix2f couplingMatrix;
-    Eigen::MatrixXf M_coup;
+    Eigen::MatrixXf M_block;
     Eigen::VectorXf delayLineOutput;
     Eigen::VectorXf delayLineInput;
     
