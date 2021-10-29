@@ -185,15 +185,21 @@ void Gfdn_pluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     for(int i = 0; i < nGroups; i++){
         gfdn.updateMixingMatrix(*mixingFrac[i]/100.0, i);
         prevMixingFrac[i] = *mixingFrac[i];
-
+        
+        prevLowT60[i] = *t60low[i];
+        prevHighT60[i] = *t60high[i];
+        prevTransitionFrequency[i] = *transFreq[i];
         gfdn.updateT60Filter(*t60low[i], *t60high[i], *transFreq[i], i);
     }
+    
     gfdn.updateDryMix(*dryMix/100.0);
 
     gfdn.updateCouplingCoeff(*couplingCoeff/100.0);
     prevCouplingCoeff = *couplingCoeff;
 
     inputData = std::vector<std::vector<float>>(samplesPerBlock, std::vector<float>(numChannels, 0.0f));
+    prevSourcePos = 0;
+    prevListenerPos = 0;
 }
 
 void Gfdn_pluginAudioProcessor::releaseResources()
@@ -237,12 +243,22 @@ void Gfdn_pluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
             gfdn.updateMixingMatrix(*mixingFrac[i]/100.0, i);
             prevMixingFrac[i] = *mixingFrac[i];
         }
-
-        gfdn.updateT60Filter (*t60low[i], *t60high[i], *transFreq[i], i);
+        if (prevLowT60[i] != *t60low[i] || prevHighT60[i] != *t60high[i] || prevTransitionFrequency[i] != *transFreq[i]){
+            gfdn.updateT60Filter (*t60low[i], *t60high[i], *transFreq[i], i);
+            prevLowT60[i] = *t60low[i];
+            prevHighT60[i] = *t60high[i];
+            prevTransitionFrequency[i] = *transFreq[i];
+        }
     }
 
-    gfdn.updateSourceRoom ((int) *sourcePos);
-    gfdn.updateListenerRoom ((int) *listenerPos);
+    if (prevSourcePos != *sourcePos){
+        gfdn.updateSourceRoom ((int) *sourcePos);
+        prevSourcePos = *sourcePos;
+    }
+    if (prevListenerPos != *listenerPos){
+        gfdn.updateListenerRoom ((int) *listenerPos);
+        prevListenerPos = *listenerPos;
+    }
 
     gfdn.updateDryMix (*dryMix/100.0);
 

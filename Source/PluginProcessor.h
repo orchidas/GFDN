@@ -76,6 +76,12 @@ public:
 private:
     float prevCouplingCoeff = 0.0f;
     float prevMixingFrac[nGroups];
+    float prevLowT60[nGroups];
+    float prevHighT60[nGroups];
+    float prevTransitionFrequency[nGroups];
+    float prevSourcePos;
+    float prevListenerPos;
+    
 
     std::vector<std::vector<float>> inputData;
 
