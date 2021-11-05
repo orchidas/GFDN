@@ -35,7 +35,6 @@ Eigen::MatrixXf MixingMatrix::updateMixingMatrix(float frac){
         kronProd = kroneckerProduct(rotation2D, temp);
         temp = kronProd;
     }
-    //M = temp;
     return temp;
 }
 

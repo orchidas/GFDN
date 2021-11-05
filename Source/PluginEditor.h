@@ -45,9 +45,9 @@ private:
     
     OwnedArray<RoomEditor> roomEditors;
     
-    juce::Label dryMixLabel, couplingCoeffLabel, mixingFracLabel, t60lowLabel, t60highLabel, transFreqLabel, sourceLabel, listenerLabel;
-    juce::Slider dryMixSlider, couplingCoeffSlider;
-    std::unique_ptr <SliderAttachment> dryMixAttach, couplingCoeffAttach;
+    juce::Label dryMixLabel, couplingCoeffLabel, betaLabel, mixingFracLabel, t60lowLabel, t60highLabel, transFreqLabel, sourceLabel, listenerLabel;
+    juce::Slider dryMixSlider, couplingCoeffSlider, betaSlider;
+    std::unique_ptr <SliderAttachment> dryMixAttach, couplingCoeffAttach, betaAtach;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Gfdn_pluginAudioProcessorEditor)
 };

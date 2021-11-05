@@ -51,8 +51,8 @@ private:
     //matrices and vectors
     MixingMatrix M;
     Eigen::MatrixXf mixingMatrix;
-    Eigen::VectorXf delayLineOutput;
-    Eigen::VectorXf delayLineInput;
+    Eigen::VectorXcf delayLineOutput;
+    Eigen::VectorXcf delayLineInput;
    
     
     

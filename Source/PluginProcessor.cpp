@@ -33,7 +33,13 @@ Gfdn_pluginAudioProcessor::Gfdn_pluginAudioProcessor()
      "Coupling Fraction", // parameter name
      0.0f,   // minimum value
      100.0f,   // maximum value
-     10.0f), // default value)
+     10.0f),    // default value)
+    std::make_unique<juce::AudioParameterFloat>
+    ("beta",
+     "Mix. filt. Cutoff",
+     0.0f,
+     100.0f,
+     50.0f),
     std::make_unique<juce::AudioParameterFloat>
     ("mixingFrac0", // parameterID
      "Mixing Fraction", // parameter name
@@ -96,6 +102,7 @@ Gfdn_pluginAudioProcessor::Gfdn_pluginAudioProcessor()
     //set user defined parameters
     dryMix = parameters.getRawParameterValue("dryMix");
     couplingCoeff = parameters.getRawParameterValue("couplingCoeff");
+    beta = parameters.getRawParameterValue("beta");
 
     for( int i = 0; i < nGroups; i++){
         mixingFrac[i] = parameters.getRawParameterValue("mixingFrac" + std::to_string(i));
@@ -196,6 +203,9 @@ void Gfdn_pluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 
     gfdn.updateCouplingCoeff(*couplingCoeff/100.0);
     prevCouplingCoeff = *couplingCoeff;
+    
+    gfdn.updateBeta(*beta/100.0);
+    prevBeta = *beta;
 
     inputData = std::vector<std::vector<float>>(samplesPerBlock, std::vector<float>(numChannels, 0.0f));
     prevSourcePos = 0;
@@ -265,6 +275,11 @@ void Gfdn_pluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
     if (prevCouplingCoeff != *couplingCoeff) {
         gfdn.updateCouplingCoeff(*couplingCoeff/100.0);
         prevCouplingCoeff = *couplingCoeff;
+    }
+    
+    if(prevBeta != *beta){
+        gfdn.updateBeta(*beta/100.0);
+        prevBeta = *beta;
     }
 
     //How many channels?

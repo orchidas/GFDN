@@ -9,7 +9,7 @@
 */
 
 #pragma once
-#include <iostream>
+#include "JuceHeader.h"
 #include <cmath>
 
 
@@ -21,15 +21,18 @@ public:
     
     void reset(const float sampleRate);
     void updateCoeff(float g_dc, float g_pi, float fT);
-    float process(const float input);
+    float* getNumeratorCoefficients();
+    float* getDenominatorCoefficients();
+    std::complex<float> process(const std::complex<float> input);
     
     
 private:
     float b0, b1, a1;   //filter coefficients
     float gDC, gPI, gFT, wT;   //parameters input by user
-    float  prevInput = 0.0f, prevOutput = 0.0f;  // filter states
+    std::complex<float> prevInput = 0.0, prevOutput = 0.0;  // filter states
     const float PI = std::acos(-1);     //pi
     float sampleRate;                  //sampling frequency
-    
+    float* numCoeff;
+    float* denCoeff;
     
 };

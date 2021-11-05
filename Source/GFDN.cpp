@@ -122,6 +122,11 @@ void GFDN::updateCouplingCoeff(float alpha){
     
 }
 
+void GFDN::updateBeta(float beta){
+    
+    couplingMatrix.updateBeta(beta);
+}
+
 
 void GFDN::updateBlockMixingMatrix(){
     
@@ -180,16 +185,14 @@ float* GFDN::processSample(float input[], int numChannels){
              fdns[i].buffers[k].update();
              fdns[i].buffers[k].write(b[j]*input[chan] + delayLineInput(j));
              delayLineOutput(j) = fdns[i].buffers[k].read();
-             output[chan] += c[j] * delayLineOutput(j);
+             output[chan] += c[j] * std::real(delayLineOutput(j));
              j++;
          }
         
     }
     
     for (int chan = 0; chan < numChannels; chan++){
-        output[chan] += dryMix * input[chan];
-        //std::cout << "Input: " << input[chan] << " Output: " << output[chan] << std::endl;
-    }
+        output[chan] += dryMix * input[chan];    }
 
     
     delayLineInput = couplingMatrix.process(delayLineOutput);

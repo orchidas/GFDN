@@ -27,6 +27,7 @@ public:
     void updateT60Filter(float t60low, float t60high, float fT, int whichRoom);
     void updateDryMix(float dry);
     void updateCouplingCoeff(float alpha);          //construct block mixing matrix
+    void updateBeta(float beta);
     void updateListenerRoom(int whichRoom);
     void updateSourceRoom(int whichRoom);
     float* processSample(float input[], int numChannels);   //takes in left and right channel data as input and returns stereo output
@@ -46,8 +47,8 @@ private:
 
     std::vector<float> output;
     Eigen::MatrixXf M_block;
-    Eigen::VectorXf delayLineOutput;
-    Eigen::VectorXf delayLineInput;
+    Eigen::VectorXcf delayLineOutput;
+    Eigen::VectorXcf delayLineInput;
     
     
 

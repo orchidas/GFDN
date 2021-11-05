@@ -39,8 +39,21 @@ Gfdn_pluginAudioProcessorEditor::Gfdn_pluginAudioProcessorEditor (Gfdn_pluginAud
     couplingCoeffLabel.setFont(Font ("Times New Roman", 15.0f, Font::plain));
     couplingCoeffLabel.attachToComponent (&couplingCoeffSlider, true);
     
+    //diffraction filter cutoff
+    addAndMakeVisible (&betaSlider);
+    betaSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
+    betaSlider.setRange (0,100.0);
+    betaSlider.setValue(50.0);
+    
+    addAndMakeVisible (betaLabel);
+    betaLabel.setText ("Mix. filt. cutoff", juce::dontSendNotification);
+    betaLabel.setFont(Font ("Times New Roman", 15.0f, Font::plain));
+    betaLabel.attachToComponent (&betaSlider, true);
+    
     couplingCoeffSlider.setTextBoxStyle (juce::Slider::TextBoxLeft, false, 50, couplingCoeffSlider.getTextBoxHeight());
+    betaSlider.setTextBoxStyle (juce::Slider::TextBoxLeft, false, 50, couplingCoeffSlider.getTextBoxHeight());
     dryMixSlider.setTextBoxStyle (juce::Slider::TextBoxLeft, false, 50, dryMixSlider.getTextBoxHeight());
+    
     
     //other labels
     addAndMakeVisible(mixingFracLabel);
@@ -74,7 +87,7 @@ Gfdn_pluginAudioProcessorEditor::Gfdn_pluginAudioProcessorEditor (Gfdn_pluginAud
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize(400, 375);
+    setSize(400, 400);
 }
 
 Gfdn_pluginAudioProcessorEditor::~Gfdn_pluginAudioProcessorEditor()
@@ -118,4 +131,6 @@ void Gfdn_pluginAudioProcessorEditor::resized()
 
     dryMixSlider.setBounds (sliderLeft - 25, 250, getWidth() - sliderLeft - 50, 50);
     couplingCoeffSlider.setBounds (sliderLeft - 25, 300, getWidth() - sliderLeft - 50, 50);
+    betaSlider.setBounds (sliderLeft - 25, 350, getWidth() - sliderLeft - 50, 50);
+
 }

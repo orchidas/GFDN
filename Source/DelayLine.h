@@ -9,9 +9,8 @@
 */
 
 #pragma once
+#include "JuceHeader.h"
 #include "ShelfFilter.h"
-
-//I referenced Jatin's FDN DelayUtils.h to update the DelayLine read and write pointers
 
 class DelayLine{
 public:
@@ -20,16 +19,16 @@ public:
     
     void setFilterCoefficients(float gDC, float gPI, float fT);     //T60 filter at end of delayline
     void prepare(const int L, const float sampleRate);    //function to set delay line length
-    float read();        //read from pointer
-    void write(const float input);      //write a pointer
+    std::complex<float> read();        //read from pointer
+    void write(const std::complex<float> input);      //write a pointer
     void update();      //update Pointers
     
 private:
     enum
     {
-        maxDelay = 64*8192,
+        maxDelay = 32*8192,
     };
-    float delayBuffer[maxDelay];
+    std::complex<float> delayBuffer[maxDelay];
     int readPtr = 0, writePtr = 0, length;
     ShelfFilter T60Filter;
 };

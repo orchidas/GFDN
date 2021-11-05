@@ -18,8 +18,10 @@ ShelfFilter::~ShelfFilter(){}
 // reset filter at the start
 void ShelfFilter::reset(const float sampleRate){
     b0 = 0.0f; b1 = 0.0f; a1 = 0.0f;
-    prevInput = 0.0f; prevOutput = 0.0f;
+    prevInput = 0.0; prevOutput = 0.0;
     this->sampleRate = sampleRate;
+    numCoeff = new float[2];
+    denCoeff = new float[2];
 }
 
 
@@ -49,12 +51,27 @@ void ShelfFilter::updateCoeff(float g_dc, float g_pi, float fT){
     a1 = (rho + alpha)/(1 + rho*alpha);
     
     //std::cout << "b0 :" << b0 << " b1 :" << b1 << " a1 :" << a1 << std::endl;
+    numCoeff[0] = b0;
+    numCoeff[1] = b1;
+    
+    denCoeff[0] = 1;
+    denCoeff[1] = 1;
+}
+
+float* ShelfFilter::getNumeratorCoefficients(){
+  
+    return numCoeff;
 }
 
 
+float* ShelfFilter::getDenominatorCoefficients(){
+    
+    return denCoeff;
+}
+
 //process each sample
-float ShelfFilter::process(const float input){
-    float output = b0*input + b1*prevInput - a1*prevOutput;
+std::complex<float> ShelfFilter::process(const std::complex<float> input){
+    std::complex<float> output = b0*input + b1*prevInput - a1*prevOutput;
     prevInput = input;
     prevOutput = output;
     

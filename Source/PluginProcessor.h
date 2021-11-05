@@ -66,6 +66,7 @@ public:
     //Input parameters
     std::atomic<float>* dryMix; // Mix level of original signal;
     std::atomic<float>* couplingCoeff; // Coupling coefficient between rooms;
+    std::atomic<float>* beta;   //parameter to control diffraction filter cut-off frequency
     std::atomic<float>* mixingFrac[nGroups];  // amount of mixing (0-1)
     std::atomic<float>* t60low[nGroups];  // T60 of low frequencies
     std::atomic<float>* t60high[nGroups];    // T60 of high frequencies
@@ -75,6 +76,7 @@ public:
 
 private:
     float prevCouplingCoeff = 0.0f;
+    float prevBeta = 0.0f;
     float prevMixingFrac[nGroups];
     float prevLowT60[nGroups];
     float prevHighT60[nGroups];
@@ -88,7 +90,7 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Gfdn_pluginAudioProcessor)
     
-    int nDelayLines[nGroups] = {8,8};
-    int LR[nGroups] = {50,101};  //lower range of delay lines in ms (non-overlapping)
-    int UR[nGroups] = {100,150};  //upper range of delay lines in ms
+    int nDelayLines[nGroups] = {4,4};
+    int LR[nGroups] = {100,120};  //lower range of delay lines in ms (non-overlapping)
+    int UR[nGroups] = {180,200};  //upper range of delay lines in ms
 };

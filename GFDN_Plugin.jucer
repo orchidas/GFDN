@@ -5,23 +5,25 @@
               pluginAUMainType="'aufx'" companyName="orchi" pluginAUIsSandboxSafe="1">
   <MAINGROUP id="MAOkfp" name="GFDN_Plugin">
     <GROUP id="{A9A594F4-8512-783A-F893-D6D4AAA7CD90}" name="Source">
-      <FILE id="lE28QI" name="CoupledMixingMatrix.cpp" compile="1" resource="0"
+      <FILE id="YpfuJf" name="CoupledMixingMatrix.cpp" compile="1" resource="0"
             file="Source/CoupledMixingMatrix.cpp"/>
-      <FILE id="N3fz2O" name="CoupledMixingMatrix.h" compile="0" resource="0"
+      <FILE id="GGvwnK" name="CoupledMixingMatrix.h" compile="0" resource="0"
             file="Source/CoupledMixingMatrix.h"/>
+      <FILE id="MoKxtJ" name="DelayLine.cpp" compile="1" resource="0" file="Source/DelayLine.cpp"/>
+      <FILE id="Hub7DK" name="DelayLine.h" compile="0" resource="0" file="Source/DelayLine.h"/>
+      <FILE id="S35emc" name="FDN.cpp" compile="1" resource="0" file="Source/FDN.cpp"/>
+      <FILE id="zv11Pi" name="FDN.h" compile="0" resource="0" file="Source/FDN.h"/>
+      <FILE id="kRR0hi" name="FIRFilter.cpp" compile="1" resource="0" file="Source/FIRFilter.cpp"/>
+      <FILE id="zxDQNX" name="FIRFilter.h" compile="0" resource="0" file="Source/FIRFilter.h"/>
+      <FILE id="ne3Cu6" name="GFDN.cpp" compile="1" resource="0" file="Source/GFDN.cpp"/>
+      <FILE id="LjCDaN" name="GFDN.h" compile="0" resource="0" file="Source/GFDN.h"/>
+      <FILE id="qPloOf" name="MixingMatrix.cpp" compile="1" resource="0"
+            file="Source/MixingMatrix.cpp"/>
+      <FILE id="U88MVn" name="MixingMatrix.h" compile="0" resource="0" file="Source/MixingMatrix.h"/>
+      <FILE id="OhaFAO" name="ShelfFilter.cpp" compile="1" resource="0" file="Source/ShelfFilter.cpp"/>
+      <FILE id="vsWqX5" name="ShelfFilter.h" compile="0" resource="0" file="Source/ShelfFilter.h"/>
       <FILE id="Vj9Lee" name="RoomEditor.cpp" compile="1" resource="0" file="Source/RoomEditor.cpp"/>
       <FILE id="OhsQ6c" name="RoomEditor.h" compile="0" resource="0" file="Source/RoomEditor.h"/>
-      <FILE id="LpUGcw" name="DelayLine.cpp" compile="1" resource="0" file="Source/DelayLine.cpp"/>
-      <FILE id="L83dYK" name="DelayLine.h" compile="0" resource="0" file="Source/DelayLine.h"/>
-      <FILE id="XrSue9" name="FDN.cpp" compile="1" resource="0" file="Source/FDN.cpp"/>
-      <FILE id="zSiqAV" name="FDN.h" compile="0" resource="0" file="Source/FDN.h"/>
-      <FILE id="LXPLa2" name="GFDN.cpp" compile="1" resource="0" file="Source/GFDN.cpp"/>
-      <FILE id="g67HZC" name="GFDN.h" compile="0" resource="0" file="Source/GFDN.h"/>
-      <FILE id="cPpuMW" name="MixingMatrix.cpp" compile="1" resource="0"
-            file="Source/MixingMatrix.cpp"/>
-      <FILE id="iIKKO5" name="MixingMatrix.h" compile="0" resource="0" file="Source/MixingMatrix.h"/>
-      <FILE id="djk2Cy" name="ShelfFilter.cpp" compile="1" resource="0" file="Source/ShelfFilter.cpp"/>
-      <FILE id="ROgjPD" name="ShelfFilter.h" compile="0" resource="0" file="Source/ShelfFilter.h"/>
       <FILE id="ALtxPl" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="m16POF" name="PluginProcessor.h" compile="0" resource="0"
