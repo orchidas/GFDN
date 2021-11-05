@@ -7,6 +7,14 @@
 	<li> <i><a href = "https://ccrma.stanford.edu/~orchi/Documents/JAES21_GFDN.pdf"> Grouped Feedback Delay Networks for Modeling of Coupled Spaces </a></i> - Das and Abel, Journal of the Audio Engineering Society, JAES 2021.</li> 
 </ul>
 
+
+<h3> Update </h3>
+
+<p>
+	The plugin now simulates diffraction through the aperture connecting the two rooms by adding filters to the mixing matrix.
+</p>
+
+
 <h3> External libraries : </h3>
 	<ul>
 		<li> <a href = "https://juce.com/">JUCE</a></li>
