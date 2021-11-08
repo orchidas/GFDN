@@ -36,7 +36,7 @@ void GFDN::initialize(int nGrp, float sR, int* nDel, int* LR, int* UR, int numCh
     }
     
     M_block.resize(totalDelayLines, totalDelayLines);
-    couplingMatrix.initialize(nGroups, totalDelayLines);
+    couplingMatrix.initialize(nGroups, totalDelayLines, nDelayLines);
     
     delayLineOutput.resize(totalDelayLines);
     delayLineOutput.setZero();
