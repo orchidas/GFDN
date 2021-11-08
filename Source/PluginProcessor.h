@@ -90,7 +90,7 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Gfdn_pluginAudioProcessor)
     
-    int nDelayLines[nGroups] = {4,4};
-    int LR[nGroups] = {100,120};  //lower range of delay lines in ms (non-overlapping)
-    int UR[nGroups] = {180,200};  //upper range of delay lines in ms
+    int nDelayLines[nGroups] = {8,8};
+    int LR[nGroups] = {50,101};  //lower range of delay lines in ms (non-overlapping)
+    int UR[nGroups] = {100,150};  //upper range of delay lines in ms
 };
