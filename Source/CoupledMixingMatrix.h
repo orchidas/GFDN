@@ -29,6 +29,8 @@ public:
     void updateCouplingFilters();
     Eigen::VectorXcf process(Eigen::VectorXcf delayLineOutput);
     
+    void preComputeFilterVariables();
+
 private:
     Eigen::MatrixXf M_block;
     Eigen::MatrixXf couplingScalars;
@@ -50,5 +52,10 @@ private:
     std::complex<float> I;  //square root of negative 1
     std::complex<float>* coeffs;
     
-    
+    // intermediate filter calculations
+    std::vector<Eigen::MatrixXcf> M_Block_time_PolyMat;
+
+    // temporaries for process()
+    Eigen::VectorXcf delayLineInput;
+    Eigen::VectorXcf filterOutput;
 };

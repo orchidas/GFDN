@@ -50,7 +50,12 @@ void CoupledMixingMatrix::initialize(int nGrp, int totalDel, int *nDel){
             PolyMat[i].resize(nDelayLines, nDelayLines);
             PolyMat[i].setZero();
         }
-        
+
+        M_Block_time_PolyMat.resize(firOrder + 1);
+        for(int i = 0; i < firOrder+1; i++){
+            M_Block_time_PolyMat[i].resize(nDelayLines, nDelayLines);
+        }
+
 //        couplingFilters = new FIRFilter*[nDelayLines];
 //        for(int i = 0; i < nDelayLines; i++){
 //            couplingFilters[i] = new FIRFilter[nDelayLines];
@@ -60,11 +65,14 @@ void CoupledMixingMatrix::initialize(int nGrp, int totalDel, int *nDel){
 //        }
     }
     
+    delayLineInput.resize(nDelayLines);
+    filterOutput.resize(nDelayLines);
 }
 
 
 void CoupledMixingMatrix::updateBlockMatrix(Eigen::MatrixXf M_block_new){
     M_block = M_block_new;
+    preComputeFilterVariables();
 }
 
 
@@ -131,14 +139,17 @@ void CoupledMixingMatrix::updateCouplingFilters(){
         }
         
     }
+
+    preComputeFilterVariables();
 }
 
+void CoupledMixingMatrix::preComputeFilterVariables(){
+    for(int i = 0; i < firOrder+1; i++){
+        M_Block_time_PolyMat[i] = M_block.cwiseProduct(PolyMat[i]);
+    }
+}
 
-Eigen::VectorXcf CoupledMixingMatrix::process(Eigen::VectorXcf delayLineOutput){
-    
-
-    Eigen::VectorXcf delayLineInput(nDelayLines);
-    
+Eigen::VectorXcf CoupledMixingMatrix::process(Eigen::VectorXcf delayLineOutput){   
     if (!isFilter)
         delayLineInput = (M_block.cwiseProduct(couplingScalars)) * delayLineOutput;
     
@@ -149,12 +160,11 @@ Eigen::VectorXcf CoupledMixingMatrix::process(Eigen::VectorXcf delayLineOutput){
         prevDelayLineOutput.col(0) = delayLineOutput;
         
         //filter with polynomial FIR matrix
-        Eigen::VectorXcf filterOutput(nDelayLines);
         filterOutput.setZero();
         
         //i am starting from 1 because i know coeffs[0] = 0
         for(int i = 1 ; i < firOrder+1; i ++){
-            filterOutput += (M_block.cwiseProduct(PolyMat[i])) * prevDelayLineOutput.col(i);
+            filterOutput += M_Block_time_PolyMat[i] * prevDelayLineOutput.col(i);
         }
         
          //doing this in a loop is too slow
