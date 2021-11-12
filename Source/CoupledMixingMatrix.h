@@ -18,6 +18,10 @@
 
 
 class CoupledMixingMatrix{
+    static constexpr int nDelayLines = 16; // total number of delay lines
+    static constexpr int firOrder = 2;     //polynomial matrix order
+    using cf = std::complex<float>;
+
 public:
     CoupledMixingMatrix();
     ~CoupledMixingMatrix();
@@ -27,15 +31,16 @@ public:
     void updateCouplingCoeff(float alpha);
     void updateBeta(float beta);
     void updateCouplingFilters();
-    Eigen::VectorXcf process(Eigen::VectorXcf delayLineOutput);
+
+    using DelayLinesIO = Eigen::Matrix<cf, nDelayLines, 1>;
+    DelayLinesIO* getDelayLineInput() { return &delayLineInput; }
+    DelayLinesIO* getDelayLineOutput() { return &filterOutput; }
+
+    void process();
     
     void preComputeFilterVariables();
 
 private:
-    static constexpr int nDelayLines = 16; // total number of delay lines
-    static constexpr int firOrder = 2;     //polynomial matrix order
-    using cf = std::complex<float>;
-    
     Eigen::Matrix<cf, nDelayLines, nDelayLines> M_block;
     Eigen::Matrix<cf, nDelayLines, nDelayLines> couplingScalars;
     Eigen::Matrix2f couplingMatrix2D;
@@ -58,6 +63,6 @@ private:
     std::array<Eigen::Matrix<cf, nDelayLines, nDelayLines>, firOrder + 1> M_Block_time_PolyMat;
 
     // temporaries for process()
-    Eigen::Matrix<cf, nDelayLines, 1> delayLineInput;
-    Eigen::Matrix<cf, nDelayLines, 1> filterOutput;
+    DelayLinesIO delayLineInput;
+    DelayLinesIO filterOutput;
 };

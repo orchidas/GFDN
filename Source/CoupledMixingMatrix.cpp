@@ -133,15 +133,15 @@ void CoupledMixingMatrix::preComputeFilterVariables(){
     }
 }
 
-Eigen::VectorXcf CoupledMixingMatrix::process(Eigen::VectorXcf delayLineOutput){   
+void CoupledMixingMatrix::process(){
     if (!isFilter)
-        delayLineInput = (M_block.cwiseProduct(couplingScalars)) * delayLineOutput;
+        delayLineInput = (M_block.cwiseProduct(couplingScalars)) * filterOutput;
     
     else{
         
         //update previous filter inputs
         prevDelayLineOutput = prevDelayLineOutput * perm;
-        prevDelayLineOutput.col(0) = delayLineOutput;
+        prevDelayLineOutput.col(0) = filterOutput;
         
         //filter with polynomial FIR matrix
         filterOutput.setZero();
@@ -163,6 +163,4 @@ Eigen::VectorXcf CoupledMixingMatrix::process(Eigen::VectorXcf delayLineOutput){
         delayLineInput = filterOutput;
        
     }
-   
-    return delayLineInput;
 }
