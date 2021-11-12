@@ -32,18 +32,20 @@ public:
     void preComputeFilterVariables();
 
 private:
-    Eigen::MatrixXf M_block;
-    Eigen::MatrixXf couplingScalars;
+    static constexpr int nDelayLines = 16; // total number of delay lines
+    static constexpr int firOrder = 2;     //polynomial matrix order
+    using cf = std::complex<float>;
+    
+    Eigen::Matrix<cf, nDelayLines, nDelayLines> M_block;
+    Eigen::Matrix<cf, nDelayLines, nDelayLines> couplingScalars;
     Eigen::Matrix2f couplingMatrix2D;
     
-    const int firOrder = 2;     //polynomial matrix order
-    Eigen::MatrixXcf* PolyMat;          //Filter matrix represented as polynomials
-    Eigen::MatrixXcf prevDelayLineOutput;   //to store previous delay line outputs for filtering
+    std::array<Eigen::Matrix<cf, nDelayLines, nDelayLines>, firOrder + 1> PolyMat; //Filter matrix represented as polynomials
+    Eigen::Matrix<cf, nDelayLines, firOrder + 1> prevDelayLineOutput;   //to store previous delay line outputs for filtering
     Eigen::PermutationMatrix<3,3> perm;     //shift columns of storage matrix to the right
     //FIRFilter** couplingFilters;    //2D array of coupling Filters
     
-    
-    int nGroup, nDelayLines;
+    int nGroup;
     int *nSize;
     bool isFilter;
     float couplingCoeff;
@@ -53,9 +55,9 @@ private:
     std::complex<float>* coeffs;
     
     // intermediate filter calculations
-    std::vector<Eigen::MatrixXcf> M_Block_time_PolyMat;
+    std::array<Eigen::Matrix<cf, nDelayLines, nDelayLines>, firOrder + 1> M_Block_time_PolyMat;
 
     // temporaries for process()
-    Eigen::VectorXcf delayLineInput;
-    Eigen::VectorXcf filterOutput;
+    Eigen::Matrix<cf, nDelayLines, 1> delayLineInput;
+    Eigen::Matrix<cf, nDelayLines, 1> filterOutput;
 };

@@ -14,46 +14,33 @@ CoupledMixingMatrix::CoupledMixingMatrix(){};
 
 
 CoupledMixingMatrix::~CoupledMixingMatrix(){
-    delete [] PolyMat;
     delete [] coeffs;
 };
 
 void CoupledMixingMatrix::initialize(int nGrp, int totalDel, int *nDel){
     
+    jassert(totalDel == nDelayLines);
+
     nGroup = nGrp;
-    nDelayLines = totalDel;
     nSize = nDel;
     isFilter = true;
     
-    M_block.resize(nDelayLines, nDelayLines);
     M_block.setIdentity();
     couplingCoeff = 0.0f;
     
     if (!isFilter){
-        couplingScalars.resize(nDelayLines, nDelayLines);
         couplingScalars.setIdentity();
     }
-    
     else{
-        
         I.real(0); I.imag(1.0);
-        PolyMat = new Eigen::MatrixXcf [firOrder+1];
         coeffs = new std::complex<float> [firOrder+1];
-        prevDelayLineOutput.resize(nDelayLines, firOrder+1);
         prevDelayLineOutput.setZero();
         
         perm.resize(firOrder+1);
         perm.indices() = {2,0,1};
-        
    
         for(int i = 0; i < firOrder+1; i++){
-            PolyMat[i].resize(nDelayLines, nDelayLines);
             PolyMat[i].setZero();
-        }
-
-        M_Block_time_PolyMat.resize(firOrder + 1);
-        for(int i = 0; i < firOrder+1; i++){
-            M_Block_time_PolyMat[i].resize(nDelayLines, nDelayLines);
         }
 
 //        couplingFilters = new FIRFilter*[nDelayLines];
@@ -64,9 +51,6 @@ void CoupledMixingMatrix::initialize(int nGrp, int totalDel, int *nDel){
 //
 //        }
     }
-    
-    delayLineInput.resize(nDelayLines);
-    filterOutput.resize(nDelayLines);
 }
 
 

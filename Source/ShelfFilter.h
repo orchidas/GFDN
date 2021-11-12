@@ -23,7 +23,15 @@ public:
     void updateCoeff(float g_dc, float g_pi, float fT);
     float* getNumeratorCoefficients();
     float* getDenominatorCoefficients();
-    std::complex<float> process(const std::complex<float> input);
+    
+    //process each sample
+    inline std::complex<float> process(const std::complex<float> input) {
+        std::complex<float> output = b0 * input + b1 * prevInput - a1 * prevOutput;
+        prevInput = input;
+        prevOutput = output;
+
+        return output;
+    }
     
     
 private:

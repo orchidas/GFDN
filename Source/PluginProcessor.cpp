@@ -210,6 +210,32 @@ void Gfdn_pluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     inputData = std::vector<std::vector<float>>(samplesPerBlock, std::vector<float>(numChannels, 0.0f));
     prevSourcePos = 0;
     prevListenerPos = 0;
+
+    // simple benchmark to look at performance...
+#if 0
+    AudioBuffer<float> impulseBuffer(2, samplesPerBlock);
+    impulseBuffer.setSample(0, 0, 1.0f);
+    impulseBuffer.setSample(1, 0, 1.0f);
+
+    MidiBuffer midi;
+
+    int hundredSecondsInSamples = int(100.0 * sampleRate);
+
+    auto start = Time::getMillisecondCounterHiRes();
+    for (int i = 0; i < hundredSecondsInSamples; i += samplesPerBlock)
+    {
+        processBlock(impulseBuffer, midi);
+        impulseBuffer.clear();
+    }
+
+    auto duration = (Time::getMillisecondCounterHiRes() - start) / 1000.0;
+
+    Logger::writeToLog("Processed 100 seconds of audio in " + String(duration) + " seconds");
+    Logger::writeToLog("Realtime factor: " + String(100.0 / duration) + "x");
+
+    jassertfalse;
+    duration = 0.0;
+#endif
 }
 
 void Gfdn_pluginAudioProcessor::releaseResources()
