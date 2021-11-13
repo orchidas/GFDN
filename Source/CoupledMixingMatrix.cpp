@@ -14,43 +14,35 @@ CoupledMixingMatrix::CoupledMixingMatrix(){};
 
 
 CoupledMixingMatrix::~CoupledMixingMatrix(){
-    delete [] PolyMat;
     delete [] coeffs;
 };
 
 void CoupledMixingMatrix::initialize(int nGrp, int totalDel, int *nDel){
     
+    jassert(totalDel == nDelayLines);
+
     nGroup = nGrp;
-    nDelayLines = totalDel;
     nSize = nDel;
     isFilter = true;
     
-    M_block.resize(nDelayLines, nDelayLines);
     M_block.setIdentity();
     couplingCoeff = 0.0f;
     
     if (!isFilter){
-        couplingScalars.resize(nDelayLines, nDelayLines);
         couplingScalars.setIdentity();
     }
-    
     else{
-        
         I.real(0); I.imag(1.0);
-        PolyMat = new Eigen::MatrixXcf [firOrder+1];
         coeffs = new std::complex<float> [firOrder+1];
-        prevDelayLineOutput.resize(nDelayLines, firOrder+1);
         prevDelayLineOutput.setZero();
         
         perm.resize(firOrder+1);
         perm.indices() = {2,0,1};
-        
    
         for(int i = 0; i < firOrder+1; i++){
-            PolyMat[i].resize(nDelayLines, nDelayLines);
             PolyMat[i].setZero();
         }
-        
+
 //        couplingFilters = new FIRFilter*[nDelayLines];
 //        for(int i = 0; i < nDelayLines; i++){
 //            couplingFilters[i] = new FIRFilter[nDelayLines];
@@ -59,12 +51,12 @@ void CoupledMixingMatrix::initialize(int nGrp, int totalDel, int *nDel){
 //
 //        }
     }
-    
 }
 
 
 void CoupledMixingMatrix::updateBlockMatrix(Eigen::MatrixXf M_block_new){
     M_block = M_block_new;
+    preComputeFilterVariables();
 }
 
 
@@ -131,30 +123,32 @@ void CoupledMixingMatrix::updateCouplingFilters(){
         }
         
     }
+
+    preComputeFilterVariables();
 }
 
+void CoupledMixingMatrix::preComputeFilterVariables(){
+    for(int i = 0; i < firOrder+1; i++){
+        M_Block_time_PolyMat[i] = M_block.cwiseProduct(PolyMat[i]);
+    }
+}
 
-Eigen::VectorXcf CoupledMixingMatrix::process(Eigen::VectorXcf delayLineOutput){
-    
-
-    Eigen::VectorXcf delayLineInput(nDelayLines);
-    
+void CoupledMixingMatrix::process(){
     if (!isFilter)
-        delayLineInput = (M_block.cwiseProduct(couplingScalars)) * delayLineOutput;
+        delayLineInput = (M_block.cwiseProduct(couplingScalars)) * filterOutput;
     
     else{
         
         //update previous filter inputs
         prevDelayLineOutput = prevDelayLineOutput * perm;
-        prevDelayLineOutput.col(0) = delayLineOutput;
+        prevDelayLineOutput.col(0) = filterOutput;
         
         //filter with polynomial FIR matrix
-        Eigen::VectorXcf filterOutput(nDelayLines);
         filterOutput.setZero();
         
         //i am starting from 1 because i know coeffs[0] = 0
         for(int i = 1 ; i < firOrder+1; i ++){
-            filterOutput += (M_block.cwiseProduct(PolyMat[i])) * prevDelayLineOutput.col(i);
+            filterOutput += M_Block_time_PolyMat[i] * prevDelayLineOutput.col(i);
         }
         
          //doing this in a loop is too slow
@@ -169,6 +163,4 @@ Eigen::VectorXcf CoupledMixingMatrix::process(Eigen::VectorXcf delayLineOutput){
         delayLineInput = filterOutput;
        
     }
-   
-    return delayLineInput;
 }

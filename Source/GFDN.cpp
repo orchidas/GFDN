@@ -38,10 +38,8 @@ void GFDN::initialize(int nGrp, float sR, int* nDel, int* LR, int* UR, int numCh
     M_block.resize(totalDelayLines, totalDelayLines);
     couplingMatrix.initialize(nGroups, totalDelayLines, nDelayLines);
     
-    delayLineOutput.resize(totalDelayLines);
-    delayLineOutput.setZero();
-    delayLineInput.resize(totalDelayLines);
-    delayLineInput.setZero();
+    delayLineOutput = couplingMatrix.getDelayLineOutput();
+    delayLineInput = couplingMatrix.getDelayLineInput();
     
     //initialize driver and receiver coefficients
     b = new float[totalDelayLines];
@@ -183,9 +181,9 @@ float* GFDN::processSample(float input[], int numChannels){
         //loop through all delay lines in groups
          for(int k = 0; k < nDelayLines[i]; k++){
              fdns[i].buffers[k].update();
-             fdns[i].buffers[k].write(b[j]*input[chan] + delayLineInput(j));
-             delayLineOutput(j) = fdns[i].buffers[k].read();
-             output[chan] += c[j] * std::real(delayLineOutput(j));
+             fdns[i].buffers[k].write(b[j]*input[chan] + delayLineInput->operator()(j));
+             delayLineOutput->operator()(j) = fdns[i].buffers[k].read();
+             output[chan] += c[j] * std::real(delayLineOutput->operator()(j));
              j++;
          }
         
@@ -195,7 +193,7 @@ float* GFDN::processSample(float input[], int numChannels){
         output[chan] += dryMix * input[chan];    }
 
     
-    delayLineInput = couplingMatrix.process(delayLineOutput);
+    couplingMatrix.process();
     //std::cout << "Input : " << input << ", Output : " <<  output << std::endl;
     return output.data();
 

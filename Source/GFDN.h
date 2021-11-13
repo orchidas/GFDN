@@ -47,11 +47,6 @@ private:
 
     std::vector<float> output;
     Eigen::MatrixXf M_block;
-    Eigen::VectorXcf delayLineOutput;
-    Eigen::VectorXcf delayLineInput;
-    
-    
-
-    
-    
+    CoupledMixingMatrix::DelayLinesIO* delayLineOutput = nullptr;
+    CoupledMixingMatrix::DelayLinesIO* delayLineInput = nullptr;
 };

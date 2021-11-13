@@ -29,25 +29,3 @@ void DelayLine::prepare(const int L, const float sampleRate){
 void DelayLine::setFilterCoefficients(float gDC, float gPI, float fT){
     T60Filter.updateCoeff(gDC, gPI, fT);
 }
-
-
-std::complex<float> DelayLine::read(){
-    return T60Filter.process(delayBuffer[readPtr]);
-}
-
-void DelayLine::write(const std::complex<float> input){
-  
-    delayBuffer[writePtr] = input;
-}
-
-//I referenced Jatin's FDN DelayUtils.h to update the DelayLine read and write pointers
-void DelayLine::update(){
-    --writePtr;
-    
-    if (writePtr < 0) // wrap write pointer
-        writePtr = maxDelay - 1;
-    
-    readPtr = writePtr + length;
-    if (readPtr >= maxDelay) // wrap read pointer
-        readPtr -= maxDelay;
-}

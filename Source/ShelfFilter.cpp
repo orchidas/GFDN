@@ -68,17 +68,3 @@ float* ShelfFilter::getDenominatorCoefficients(){
     
     return denCoeff;
 }
-
-//process each sample
-std::complex<float> ShelfFilter::process(const std::complex<float> input){
-    std::complex<float> output = b0*input + b1*prevInput - a1*prevOutput;
-    prevInput = input;
-    prevOutput = output;
-    
-    return output;
-}
-
-
-
-
-
