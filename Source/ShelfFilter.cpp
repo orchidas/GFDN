@@ -55,7 +55,7 @@ void ShelfFilter::updateCoeff(float g_dc, float g_pi, float fT){
     numCoeff[1] = b1;
     
     denCoeff[0] = 1;
-    denCoeff[1] = 1;
+    denCoeff[1] = a1;
 }
 
 float* ShelfFilter::getNumeratorCoefficients(){
