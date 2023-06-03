@@ -20,7 +20,7 @@ public:
     FDN();                      //constructor
     ~FDN();                     //destructor
     
-    void initialize(float SR, int nDel, int LR, int UR);  //initialize FDN, setup delayLine buffers
+    void initialize(float SR, int nDel, int* delayLengths);  //initialize FDN, setup delayLine buffers
     
     void updateMixingMatrix(float frac);     //update mixing matrix when user changes parameters
     
@@ -53,8 +53,6 @@ private:
     Eigen::MatrixXf mixingMatrix;
     Eigen::VectorXcf delayLineOutput;
     Eigen::VectorXcf delayLineInput;
-   
-    
     
 };
 

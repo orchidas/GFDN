@@ -21,7 +21,7 @@ public:
     GFDN();
     ~GFDN();
     
-    void initialize(int nGrp, float SR, int* nDel, int *LR, int* UR, int numChannels);
+    void initialize(int nGrp, float SR, int* nDel, int** delayLengths, int numChannels);
     void updateMixingMatrix(float mixingFrac, int whichRoom);
     void updateBlockMixingMatrix();
     void updateT60Filter(float t60low, float t60high, float fT, int whichRoom);

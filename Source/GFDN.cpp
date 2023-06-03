@@ -19,7 +19,7 @@ GFDN::~GFDN(){
     delete [] c;
 }
 
-void GFDN::initialize(int nGrp, float sR, int* nDel, int* LR, int* UR, int numChannels){
+void GFDN::initialize(int nGrp, float sR, int* nDel, int** delayLengths, int numChannels){
     
     nGroups = nGrp;
     fdns = new FDN[nGroups];
@@ -30,7 +30,7 @@ void GFDN::initialize(int nGrp, float sR, int* nDel, int* LR, int* UR, int numCh
     for(int i = 0; i < nGroups; i++){
         
         nDelayLines[i] = nDel[i];
-        fdns[i].initialize(sR, nDelayLines[i], LR[i], UR[i]);
+        fdns[i].initialize(sR, nDelayLines[i], delayLengths[i]);
         totalDelayLines += nDelayLines[i];
         mixingAngles[i] = 0.0f;
     }

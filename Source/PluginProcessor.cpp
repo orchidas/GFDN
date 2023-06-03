@@ -181,13 +181,60 @@ void Gfdn_pluginAudioProcessor::changeProgramName (int index, const String& newN
 {
 }
 
+//function to find prime numbers in a range and permute them to find delay line lengths
+//==========================
+void Gfdn_pluginAudioProcessor::initializeDelayLengths(float sampleRate){
+    int count = 0;
+    bool prime;
+    int N = 0;
+    int group;
+    int start_prime = (int)(LR * sampleRate/1000.0);
+    int end_prime = (int)(UR * sampleRate/1000.0);
+    delayLengths = new int*[nGroups];
+    
+    for(int i = 0; i < nGroups; i++)
+        N+= nDelayLines[i];
+    int primeNums[N];
+    
+    //find prime numbers
+    for(int i = start_prime; i <= end_prime; i++){
+        group = (int)std::round(count/numDelLinesPerGroup);
+        if (count >= N)
+            break;
+        else{
+            prime= true;
+            for(int k = 2; k < i/2; k++){
+                if (i % k == 0){
+                    prime = false;
+                    break;
+                }
+            }
+            if (prime == true)
+                primeNums[count++] = i;
+        }
+    }
+    
+    //permutation in place
+    std::next_permutation(primeNums, primeNums + N);
+    //copy permuted prime numbers into
+    count = 0;
+    for(int grp = 0; grp < nGroups; grp++){
+        delayLengths[grp] = new int[numDelLinesPerGroup];
+        for (int i = 0; i < numDelLinesPerGroup; i++){
+            delayLengths[grp][i] = primeNums[count++];
+        }
+    }
+        
+}
 //==============================================================================
 void Gfdn_pluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     const int numChannels = getMainBusNumInputChannels();
-    gfdn.initialize(nGroups, (float)sampleRate, nDelayLines, LR, UR, numChannels);
+    
+    initializeDelayLengths((float)sampleRate);
+    gfdn.initialize(nGroups, (float)sampleRate, nDelayLines, delayLengths, numChannels);
     
     for(int i = 0; i < nGroups; i++){
         gfdn.updateMixingMatrix(*mixingFrac[i]/100.0, i);

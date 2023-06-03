@@ -55,6 +55,8 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    void initializeDelayLengths(float sampleRate);
+
     enum
     {
         nGroups = 2,
@@ -83,6 +85,7 @@ private:
     float prevTransitionFrequency[nGroups];
     float prevSourcePos;
     float prevListenerPos;
+    const static int numDelLinesPerGroup = 8;
     
 
     std::vector<std::vector<float>> inputData;
@@ -90,7 +93,8 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Gfdn_pluginAudioProcessor)
     
-    int nDelayLines[nGroups] = {8,8};
-    int LR[nGroups] = {50,101};  //lower range of delay lines in ms (non-overlapping)
-    int UR[nGroups] = {100,150};  //upper range of delay lines in ms
+    int nDelayLines[nGroups] = {numDelLinesPerGroup,numDelLinesPerGroup};
+    int **delayLengths;
+    int LR = 25;  //lower range of delay lines in ms (non-overlapping)
+    int UR = 50;  //upper range of delay lines in ms
 };
