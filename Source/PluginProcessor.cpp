@@ -35,7 +35,7 @@ Gfdn_pluginAudioProcessor::Gfdn_pluginAudioProcessor()
      100.0f,   // maximum value
      10.0f),    // default value)
     std::make_unique<juce::AudioParameterFloat>
-        (ParameterID{"beta", 1},
+    (ParameterID{"beta", 1},
      "Mix. filt. Cutoff",
      0.0f,
      100.0f,
@@ -47,43 +47,43 @@ Gfdn_pluginAudioProcessor::Gfdn_pluginAudioProcessor()
      100.0f,   // maximum value
      0.0f),  //default value
     std::make_unique<juce::AudioParameterFloat>
-    (ParameterID{"t60low0",1}, // parameterID
+     (ParameterID{"t60low0", 1}, // parameterID
      "Low T60", // parameter name
      0.05f,   // minimum value
      20.0f,   // maximum value
      1.0f), // default value
     std::make_unique<juce::AudioParameterFloat>
-    (ParameterID{"t60high0",1}, // parameterID
+     (ParameterID{"t60high0",1}, // parameterID
      "High T60", // parameter name
      0.05f,   // minimum value
      10.0f,   // maximum value
      0.5f),
     std::make_unique<juce::AudioParameterFloat>
-    (ParameterID{"transFreq0",1}, // parameterID
+     (ParameterID{"transFreq0",1}, // parameterID
      "Trans. Frequency", // parameter name
      100.0f,   // minimum value
      10000.0f,   // maximum value
      200.0f),
     std::make_unique<juce::AudioParameterFloat>
-    (ParameterID{"mixingFrac1",1}, // parameterID
+     (ParameterID{"mixingFrac1",1}, // parameterID
      "Mixing Fraction", // parameter name
      0.0f,   // minimum value
      100.0f,   // maximum value
      0.0f),  //default value
     std::make_unique<juce::AudioParameterFloat>
-    (ParameterID{"t60low1",1}, // parameterID
+     (ParameterID{"t60low1",1}, // parameterID
      "Low T60", // parameter name
      0.05f,   // minimum value
      20.0f,   // maximum value
      3.0f), // default value
     std::make_unique<juce::AudioParameterFloat>
-    (ParameterID{"t60high1",1}, // parameterID
+     (ParameterID{"t60high1",1}, // parameterID
      "High T60", // parameter name
      0.05f,   // minimum value
      10.0f,   // maximum value
      1.0f),
     std::make_unique<juce::AudioParameterFloat>
-    (ParameterID{"transFreq1",1}, // parameterID
+     (ParameterID{"transFreq1",1}, // parameterID
      "Trans. Frequency", // parameter name
      100.0f,   // minimum value
      10000.0f,   // maximum value
@@ -258,6 +258,8 @@ void Gfdn_pluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     inputData = std::vector<std::vector<float>>(samplesPerBlock, std::vector<float>(numChannels, 0.0f));
     prevSourcePos = 0;
     prevListenerPos = 0;
+    std::cout << "Successfully initialised GFDN" << std::endl;
+
 
      //simple benchmark to look at performance...
 #if 0
@@ -374,6 +376,7 @@ void Gfdn_pluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
         
     for (int i = 0; i < numSamples; i++){
         output = gfdn.processSample(inputData[i].data(), numChannels);
+        std::cout << "Input :" << inputData[i].data() << " Output :" << output << std::endl;
         
         for(int chan = 0; chan < numChannels; chan++){
             //std::cout << "Input :" << inputData[i][chan] << " Output : " << output[chan] << std::endl;
