@@ -13,7 +13,6 @@
 GFDN::GFDN(){}
 GFDN::~GFDN(){
     delete [] fdns;
-    delete [] nDelayLines;
     delete [] mixingAngles;
     delete [] b;
     delete [] c;
@@ -191,7 +190,7 @@ float* GFDN::processSample(const float input[], int numChannels){
     
     for (int chan = 0; chan < numChannels; chan++){
         output[chan] += dryMix * input[chan];
-        std::cout << "Input : " << input[chan] << ", Output : " <<  output[chan] << std::endl;
+        //std::cout << "Input : " << input[chan] << ", Output : " <<  output[chan] << std::endl;
 
     }
 

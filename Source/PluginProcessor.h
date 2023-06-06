@@ -85,7 +85,7 @@ private:
     float prevTransitionFrequency[nGroups];
     float prevSourcePos;
     float prevListenerPos;
-    const static int numDelLinesPerGroup = 8;
+    const static int numDelLinesPerGroup = 4;
     
 
     std::vector<std::vector<float>> inputData;
@@ -95,6 +95,6 @@ private:
     
     int nDelayLines[nGroups] = {numDelLinesPerGroup,numDelLinesPerGroup};
     int **delayLengths;
-    int LR = 25;  //lower range of delay lines in ms (non-overlapping)
-    int UR = 50;  //upper range of delay lines in ms
+    int LR = 100;  //lower range of delay lines in ms (non-overlapping)
+    int UR = 150;  //upper range of delay lines in ms
 };

@@ -13,7 +13,10 @@
 CoupledMixingMatrix::CoupledMixingMatrix(){};
 
 
-CoupledMixingMatrix::~CoupledMixingMatrix(){};
+CoupledMixingMatrix::~CoupledMixingMatrix(){
+    if (isFilter)
+        delete [] coeffs;
+};
 
 void CoupledMixingMatrix::initialize(int nGrp, int totalDel, int *nDel){
     
