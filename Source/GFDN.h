@@ -30,7 +30,7 @@ public:
     void updateBeta(float beta);
     void updateListenerRoom(int whichRoom);
     void updateSourceRoom(int whichRoom);
-    float* processSample(float input[], int numChannels);   //takes in left and right channel data as input and returns stereo output
+    float* processSample(const float input[], int numChannels);   //takes in left and right channel data as input and returns stereo output
     
 private:
     

@@ -159,7 +159,7 @@ void GFDN::updateBlockMixingMatrix(){
 
 
 
-float* GFDN::processSample(float input[], int numChannels){
+float* GFDN::processSample(const float input[], int numChannels){
     
     // output should be stereo
     for (int chan = 0; chan < numChannels; chan++){
@@ -190,11 +190,13 @@ float* GFDN::processSample(float input[], int numChannels){
     }
     
     for (int chan = 0; chan < numChannels; chan++){
-        output[chan] += dryMix * input[chan];    }
+        output[chan] += dryMix * input[chan];
+        std::cout << "Input : " << input[chan] << ", Output : " <<  output[chan] << std::endl;
+
+    }
 
     
     couplingMatrix.process();
-    //std::cout << "Input : " << input << ", Output : " <<  output << std::endl;
     return output.data();
 
 }

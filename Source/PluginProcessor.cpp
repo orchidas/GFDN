@@ -23,77 +23,77 @@ Gfdn_pluginAudioProcessor::Gfdn_pluginAudioProcessor()
                        ),
     parameters(*this, nullptr, juce::Identifier ("GFDNPlugin"),{
     std::make_unique<juce::AudioParameterFloat>
-    ("dryMix", // parameterID
+    (ParameterID{"dryMix",1}, // parameterID
      "Dry Mix", // parameter name
      0.0f,   // minimum value
      100.0f,   // maximum value
      50.0f), // default value)
     std::make_unique<juce::AudioParameterFloat>
-    ("couplingCoeff", // parameterID
+    (ParameterID{"couplingCoeff",1}, // parameterID
      "Coupling Fraction", // parameter name
      0.0f,   // minimum value
      100.0f,   // maximum value
      10.0f),    // default value)
     std::make_unique<juce::AudioParameterFloat>
-    ("beta",
+        (ParameterID{"beta", 1},
      "Mix. filt. Cutoff",
      0.0f,
      100.0f,
      50.0f),
     std::make_unique<juce::AudioParameterFloat>
-    ("mixingFrac0", // parameterID
+    (ParameterID{"mixingFrac0", 1},// parameterID
      "Mixing Fraction", // parameter name
      0.0f,   // minimum value
      100.0f,   // maximum value
      0.0f),  //default value
     std::make_unique<juce::AudioParameterFloat>
-    ("t60low0", // parameterID
+    (ParameterID{"t60low0",1}, // parameterID
      "Low T60", // parameter name
      0.05f,   // minimum value
      20.0f,   // maximum value
      1.0f), // default value
     std::make_unique<juce::AudioParameterFloat>
-    ("t60high0", // parameterID
+    (ParameterID{"t60high0",1}, // parameterID
      "High T60", // parameter name
      0.05f,   // minimum value
      10.0f,   // maximum value
      0.5f),
     std::make_unique<juce::AudioParameterFloat>
-    ("transFreq0", // parameterID
+    (ParameterID{"transFreq0",1}, // parameterID
      "Trans. Frequency", // parameter name
      100.0f,   // minimum value
      10000.0f,   // maximum value
      200.0f),
     std::make_unique<juce::AudioParameterFloat>
-    ("mixingFrac1", // parameterID
+    (ParameterID{"mixingFrac1",1}, // parameterID
      "Mixing Fraction", // parameter name
      0.0f,   // minimum value
      100.0f,   // maximum value
      0.0f),  //default value
     std::make_unique<juce::AudioParameterFloat>
-    ("t60low1", // parameterID
+    (ParameterID{"t60low1",1}, // parameterID
      "Low T60", // parameter name
      0.05f,   // minimum value
      20.0f,   // maximum value
      3.0f), // default value
     std::make_unique<juce::AudioParameterFloat>
-    ("t60high1", // parameterID
+    (ParameterID{"t60high1",1}, // parameterID
      "High T60", // parameter name
      0.05f,   // minimum value
      10.0f,   // maximum value
      1.0f),
     std::make_unique<juce::AudioParameterFloat>
-    ("transFreq1", // parameterID
+    (ParameterID{"transFreq1",1}, // parameterID
      "Trans. Frequency", // parameter name
      100.0f,   // minimum value
      10000.0f,   // maximum value
      500.0f),
     std::make_unique<juce::AudioParameterInt>
-    ("sourcePos",
+    (ParameterID{"sourcePos",1},
      "Source",
      0, nGroups - 1, 0),
     std::make_unique<juce::AudioParameterInt>
-    ("listenerPos",
+    (ParameterID{"listenerPos",1},
      "Listener",
      0, nGroups - 1, 0),
     })
@@ -222,6 +222,7 @@ void Gfdn_pluginAudioProcessor::initializeDelayLengths(float sampleRate){
         delayLengths[grp] = new int[numDelLinesPerGroup];
         for (int i = 0; i < numDelLinesPerGroup; i++){
             delayLengths[grp][i] = primeNums[count++];
+            //std::cout << "Delay line length : " << delayLengths[grp][i] << std::endl;
         }
     }
         
@@ -375,6 +376,7 @@ void Gfdn_pluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
         output = gfdn.processSample(inputData[i].data(), numChannels);
         
         for(int chan = 0; chan < numChannels; chan++){
+            //std::cout << "Input :" << inputData[i][chan] << " Output : " << output[chan] << std::endl;
             buffer.setSample(chan, i, output[chan]);
         }
     }

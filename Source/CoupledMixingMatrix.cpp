@@ -13,9 +13,7 @@
 CoupledMixingMatrix::CoupledMixingMatrix(){};
 
 
-CoupledMixingMatrix::~CoupledMixingMatrix(){
-    delete [] coeffs;
-};
+CoupledMixingMatrix::~CoupledMixingMatrix(){};
 
 void CoupledMixingMatrix::initialize(int nGrp, int totalDel, int *nDel){
     
@@ -154,9 +152,7 @@ void CoupledMixingMatrix::process(){
          //doing this in a loop is too slow
          /*for(int i = 0; i < nDelayLines; i++){
              for(int j = 0; j < nDelayLines; j++){
-         
                  filterOutput(i) += M_block(i,j) * couplingFilters[i][j].process(delayLineOutput(j));
-         
              }
          }*/
         
