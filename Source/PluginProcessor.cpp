@@ -376,11 +376,11 @@ void Gfdn_pluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBu
         
     for (int i = 0; i < numSamples; i++){
         output = gfdn.processSample(inputData[i].data(), numChannels);
-        std::cout << "Input :" << inputData[i].data() << " Output :" << output << std::endl;
         
         for(int chan = 0; chan < numChannels; chan++){
             //std::cout << "Input :" << inputData[i][chan] << " Output : " << output[chan] << std::endl;
             buffer.setSample(chan, i, output[chan]);
+            //std::cout << "Input: " << inputData[i][chan] << " Output:" << output[chan] << std::endl;
         }
     }
     
