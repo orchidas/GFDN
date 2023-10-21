@@ -259,7 +259,7 @@ void Gfdn_pluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     prevSourcePos = 0;
     prevListenerPos = 0;
 
-    // simple benchmark to look at performance...
+     //simple benchmark to look at performance...
 #if 0
     AudioBuffer<float> impulseBuffer(2, samplesPerBlock);
     impulseBuffer.setSample(0, 0, 1.0f);

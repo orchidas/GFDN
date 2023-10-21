@@ -16,6 +16,7 @@ CoupledMixingMatrix::CoupledMixingMatrix(){};
 CoupledMixingMatrix::~CoupledMixingMatrix(){
     if (isFilter)
         delete [] coeffs;
+    delete [] nSize;
 };
 
 void CoupledMixingMatrix::initialize(int nGrp, int totalDel, int *nDel){
@@ -28,6 +29,7 @@ void CoupledMixingMatrix::initialize(int nGrp, int totalDel, int *nDel){
     
     M_block.setIdentity();
     couplingCoeff = 0.0f;
+    delayLineInput.setZero();
     
     if (!isFilter){
         couplingScalars.setIdentity();
@@ -43,14 +45,6 @@ void CoupledMixingMatrix::initialize(int nGrp, int totalDel, int *nDel){
         for(int i = 0; i < firOrder+1; i++){
             PolyMat[i].setZero();
         }
-
-//        couplingFilters = new FIRFilter*[nDelayLines];
-//        for(int i = 0; i < nDelayLines; i++){
-//            couplingFilters[i] = new FIRFilter[nDelayLines];
-//            for (int j = 0; j < nDelayLines; j++)
-//                couplingFilters[i][j].initialize(firOrder);
-//
-//        }
     }
 }
 
@@ -114,8 +108,6 @@ void CoupledMixingMatrix::updateCouplingFilters(){
                 
                 for (int k = 0; k < nSize[i]; k++){
                     for(int m = 0; m < nSize[j]; m++){
-                        //couplingFilters[i*nSize+k][j*nSize+m].setCoefficients(coeffs);
-
                         for (int p = 0; p < firOrder+1; p++)
                             PolyMat[p](i*nSize[i]+k, j*nSize[j]+m) = coeffs[p];
                     }
@@ -151,13 +143,6 @@ void CoupledMixingMatrix::process(){
         for(int i = 1 ; i < firOrder+1; i ++){
             filterOutput += M_Block_time_PolyMat[i] * prevDelayLineOutput.col(i);
         }
-        
-         //doing this in a loop is too slow
-         /*for(int i = 0; i < nDelayLines; i++){
-             for(int j = 0; j < nDelayLines; j++){
-                 filterOutput(i) += M_block(i,j) * couplingFilters[i][j].process(delayLineOutput(j));
-             }
-         }*/
         
         delayLineInput = filterOutput;
        

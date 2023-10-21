@@ -40,7 +40,7 @@ void FDN::initialize(float SR, int nDel, int* delayLengths){
     
     for(int i = 0; i < nDelayLines; ++i){
         
-        std::cout << "Delay line length: " << delLen[i] << std::endl;
+        //std::cout << "Delay line length: " << delLen[i] << std::endl;
         buffers[i].prepare(delLen[i], sampleRate);        //prepare the delay lines
         b[i] = -1 + 2 * ((float)std::rand())/RAND_MAX;    //random numbers between -1 and 1
         c[i] = -1 + 2 * ((float)std::rand())/RAND_MAX;    //output coefficients

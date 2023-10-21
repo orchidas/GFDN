@@ -2,7 +2,8 @@
 
 <JUCERPROJECT id="Qt6Nr3" name="GFDN_Plugin" projectType="audioplug" displaySplashScreen="1"
               jucerFormatVersion="1" pluginManufacturer="orchi" pluginFormats="buildAU,buildAUv3,buildStandalone,buildVST3"
-              pluginAUMainType="'aufx'" companyName="orchi" pluginAUIsSandboxSafe="1">
+              pluginAUMainType="'aufx'" companyName="orchi" pluginAUIsSandboxSafe="1"
+              cppLanguageStandard="17">
   <MAINGROUP id="MAOkfp" name="GFDN_Plugin">
     <GROUP id="{A9A594F4-8512-783A-F893-D6D4AAA7CD90}" name="Source">
       <FILE id="NPEK6m" name="DelayLine.cpp" compile="1" resource="0" file="Source/DelayLine.cpp"/>

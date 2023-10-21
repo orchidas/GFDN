@@ -95,6 +95,6 @@ private:
     
     int nDelayLines[nGroups] = {numDelLinesPerGroup,numDelLinesPerGroup};
     int **delayLengths;
-    int LR = 100;  //lower range of delay lines in ms (non-overlapping)
-    int UR = 150;  //upper range of delay lines in ms
+    int LR = 50;  //lower range of delay lines in ms (non-overlapping)
+    int UR = 100;  //upper range of delay lines in ms
 };
