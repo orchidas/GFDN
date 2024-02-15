@@ -21,7 +21,7 @@ public:
     GFDN();
     ~GFDN();
     
-    void initialize(int nGrp, float SR, int* nDel, int *LR, int* UR, int numChannels);
+    void initialize(int nGrp, float SR, int* nDel, int** delayLengths, int numChannels);
     void updateMixingMatrix(float mixingFrac, int whichRoom);
     void updateBlockMixingMatrix();
     void updateT60Filter(float t60low, float t60high, float fT, int whichRoom);
@@ -30,7 +30,7 @@ public:
     void updateBeta(float beta);
     void updateListenerRoom(int whichRoom);
     void updateSourceRoom(int whichRoom);
-    float* processSample(float input[], int numChannels);   //takes in left and right channel data as input and returns stereo output
+    float* processSample(const float input[], int numChannels);   //takes in left and right channel data as input and returns stereo output
     
 private:
     

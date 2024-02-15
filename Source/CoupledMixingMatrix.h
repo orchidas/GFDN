@@ -18,7 +18,7 @@
 
 
 class CoupledMixingMatrix{
-    static constexpr int nDelayLines = 16; // total number of delay lines
+    static constexpr int nDelayLines = 8; // total number of delay lines
     static constexpr int firOrder = 2;     //polynomial matrix order
     using cf = std::complex<float>;
 

@@ -19,7 +19,7 @@ FDN::~FDN(){
     delete [] c;
 }
 
-void FDN::initialize(float SR, int nDel, int LR, int UR){
+void FDN::initialize(float SR, int nDel, int* delayLengths){
     
     nDelayLines = nDel;               //number of delay lines
     sampleRate = SR;                  //sampleRate
@@ -35,14 +35,12 @@ void FDN::initialize(float SR, int nDel, int LR, int UR){
     buffers = new DelayLine[nDelayLines];
     b = new float[nDelayLines];
     c = new float[nDelayLines];
-    
-    //allocate prime lengths to delay lines
-    findNPrime((int)(LR * sampleRate/1000.0),(int)(UR * sampleRate/1000.0),nDelayLines);
-    
+    std::copy(delayLengths, delayLengths+nDel, delLen);
+        
     
     for(int i = 0; i < nDelayLines; ++i){
         
-        //std::cout << delLen[i] << std::endl;
+        //std::cout << "Delay line length: " << delLen[i] << std::endl;
         buffers[i].prepare(delLen[i], sampleRate);        //prepare the delay lines
         b[i] = -1 + 2 * ((float)std::rand())/RAND_MAX;    //random numbers between -1 and 1
         c[i] = -1 + 2 * ((float)std::rand())/RAND_MAX;    //output coefficients
@@ -98,31 +96,3 @@ float FDN::processSample(const float input){
     return output;
     
 }
-
-void FDN::findNPrime(int LR, int UR, int N){
-    
-    int count = 0;
-    bool prime;
-   
-    for(int i = LR; i <= UR; i++){
-        if (count >= N)
-            return;
-        else{
-            prime= true;
-            for(int k = 2; k < i/2; k++){
-                if (i % k == 0){
-                    prime = false;
-                    break;
-                }
-            }
-            if (prime == true)
-                delLen[count++] = i;
-         
-        }
-    }
-    
-
-}
-
-
-

@@ -2,15 +2,16 @@
 
 <JUCERPROJECT id="Qt6Nr3" name="GFDN_Plugin" projectType="audioplug" displaySplashScreen="1"
               jucerFormatVersion="1" pluginManufacturer="orchi" pluginFormats="buildAU,buildAUv3,buildStandalone,buildVST3"
-              pluginAUMainType="'aufx'" companyName="orchi" pluginAUIsSandboxSafe="1">
+              pluginAUMainType="'aufx'" companyName="orchi" pluginAUIsSandboxSafe="1"
+              cppLanguageStandard="17">
   <MAINGROUP id="MAOkfp" name="GFDN_Plugin">
     <GROUP id="{A9A594F4-8512-783A-F893-D6D4AAA7CD90}" name="Source">
+      <FILE id="NPEK6m" name="DelayLine.cpp" compile="1" resource="0" file="Source/DelayLine.cpp"/>
+      <FILE id="DkvxKZ" name="DelayLine.h" compile="0" resource="0" file="Source/DelayLine.h"/>
       <FILE id="YpfuJf" name="CoupledMixingMatrix.cpp" compile="1" resource="0"
             file="Source/CoupledMixingMatrix.cpp"/>
       <FILE id="GGvwnK" name="CoupledMixingMatrix.h" compile="0" resource="0"
             file="Source/CoupledMixingMatrix.h"/>
-      <FILE id="MoKxtJ" name="DelayLine.cpp" compile="1" resource="0" file="Source/DelayLine.cpp"/>
-      <FILE id="Hub7DK" name="DelayLine.h" compile="0" resource="0" file="Source/DelayLine.h"/>
       <FILE id="S35emc" name="FDN.cpp" compile="1" resource="0" file="Source/FDN.cpp"/>
       <FILE id="zv11Pi" name="FDN.h" compile="0" resource="0" file="Source/FDN.h"/>
       <FILE id="kRR0hi" name="FIRFilter.cpp" compile="1" resource="0" file="Source/FIRFilter.cpp"/>
@@ -36,7 +37,8 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" headerPath="/usr/local/include/eigen3"/>
+        <CONFIGURATION isDebug="1" name="Debug" headerPath="/usr/local/include/eigen3"
+                       optimisation="4"/>
         <CONFIGURATION isDebug="0" name="Release" headerPath="/usr/local/include/eigen3"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
