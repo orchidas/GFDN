@@ -85,7 +85,7 @@ private:
     float prevTransitionFrequency[nGroups];
     float prevSourcePos;
     float prevListenerPos;
-    const static int numDelLinesPerGroup = 4;
+    const static int numDelLinesPerGroup = 8;
     
 
     std::vector<std::vector<float>> inputData;

@@ -31,7 +31,6 @@ public:
     void paint (Graphics&) override;
     void resized() override;
 
-    
     enum
     {
         nGroups = 2,
